@@ -1,0 +1,9 @@
+V3 4
+FL E:/Users/jdubois_2008_08/Enseignement/FPGA_ITA2_ITA3_ITA5/TP/TP2/Pour_etudiants/test_io/test/iob.vhd 2007/02/21.19:28:10 O.76xd
+EN work/test_io 1322041502 \
+      FL E:/Users/jdubois_2008_08/Enseignement/FPGA_ITA2_ITA3_ITA5/TP/TP2/Pour_etudiants/test_io/test/iob.vhd \
+      PB ieee/std_logic_1164 1317710503 PB ieee/std_logic_arith 1317710504 \
+      PB ieee/STD_LOGIC_UNSIGNED 1317710506
+AR work/test_io/arch_test_io 1322041503 \
+      FL E:/Users/jdubois_2008_08/Enseignement/FPGA_ITA2_ITA3_ITA5/TP/TP2/Pour_etudiants/test_io/test/iob.vhd \
+      EN work/test_io 1322041502 CP IOBUF_F_16

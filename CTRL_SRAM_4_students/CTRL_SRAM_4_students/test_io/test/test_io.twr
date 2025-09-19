@@ -1,0 +1,53 @@
+--------------------------------------------------------------------------------
+Release 13.3 Trace  (nt)
+Copyright (c) 1995-2011 Xilinx, Inc.  All rights reserved.
+
+C:\Xilinx\13.3\ISE_DS\ISE\bin\nt\unwrapped\trce.exe -intstyle ise -e 3 -s 12 -n
+3 -xml test_io.twx test_io.ncd -o test_io.twr test_io.pcf
+
+Design file:              test_io.ncd
+Physical constraint file: test_io.pcf
+Device,package,speed:     xc4vlx80,ff1148,-12 (PRODUCTION 1.70 2011-10-03, STEPPING level 1)
+Report level:             error report
+
+Environment Variable      Effect 
+--------------------      ------ 
+NONE                      No environment variables were set
+--------------------------------------------------------------------------------
+
+INFO:Timing:2698 - No timing constraints found, doing default enumeration.
+INFO:Timing:2752 - To get complete path coverage, use the unconstrained paths 
+   option. All paths that are not constrained will be reported in the 
+   unconstrained paths section(s) of the report.
+INFO:Timing:3339 - The clock-to-out numbers in this timing report are based on 
+   a 50 Ohm transmission line loading model.  For the details of this model, 
+   and for more information on accounting for different loading conditions, 
+   please see the device datasheet.
+
+
+
+Data Sheet report:
+-----------------
+All values displayed in nanoseconds (ns)
+
+Pad to Pad
+---------------+---------------+---------+
+Source Pad     |Destination Pad|  Delay  |
+---------------+---------------+---------+
+ENTREE         |E_S            |    3.836|
+E_S            |SORTIE         |    4.843|
+TRIG           |E_S            |    4.026|
+---------------+---------------+---------+
+
+
+Analysis completed Wed Nov 23 10:46:40 2011 
+--------------------------------------------------------------------------------
+
+Trace Settings:
+-------------------------
+Trace Settings 
+
+Peak Memory Usage: 264 MB
+
+
+
