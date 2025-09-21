@@ -42,6 +42,15 @@ end SRAM_controller;
 
 architecture Behavioral of SRAM_controller is
 
+--Declaration des signaux
+signal nBWA : STD_LOGIC := '0';
+signal nBWC : STD_LOGIC := '0';
+signal nBWD : STD_LOGIC := '0';
+signal ZZ : STD_LOGIC := '0';
+signal Lbo_n : STD_LOGIC := '0';
+signal nCKE : STD_LOGIC := '0';
+--Fin de la declaration des signaux
+
 begin
 
 

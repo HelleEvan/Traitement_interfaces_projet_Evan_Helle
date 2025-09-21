@@ -1,0 +1,16 @@
+#-----------------------------------------------------------
+# Vivado v2021.2 (64-bit)
+# SW Build 3367213 on Tue Oct 19 02:48:09 MDT 2021
+# IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
+# Start of session at: Sun Sep 21 13:19:45 2025
+# Process ID: 19528
+# Current directory: C:/Users/evanm/Documents/ESIREM/5a/S9/traitements_interfaces/projet/Controller_SRAM_Helle
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent19420 C:\Users\evanm\Documents\ESIREM\5a\S9\traitements_interfaces\projet\Controller_SRAM_Helle\Controller_SRAM_Helle.xpr
+# Log file: C:/Users/evanm/Documents/ESIREM/5a/S9/traitements_interfaces/projet/Controller_SRAM_Helle/vivado.log
+# Journal file: C:/Users/evanm/Documents/ESIREM/5a/S9/traitements_interfaces/projet/Controller_SRAM_Helle\vivado.jou
+# Running On: HuaweiMateBook, OS: Windows, CPU Frequency: 2296 MHz, CPU Physical cores: 8, Host memory: 16040 MB
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/evanm/Documents/ESIREM/5a/S9/traitements_interfaces/projet/Controller_SRAM_Helle/Controller_SRAM_Helle.xpr
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
