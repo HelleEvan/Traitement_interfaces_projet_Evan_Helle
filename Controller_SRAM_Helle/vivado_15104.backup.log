@@ -2,10 +2,10 @@
 # Vivado v2021.2 (64-bit)
 # SW Build 3367213 on Tue Oct 19 02:48:09 MDT 2021
 # IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
-# Start of session at: Mon Sep 22 10:44:48 2025
-# Process ID: 7788
+# Start of session at: Sun Sep 21 13:44:42 2025
+# Process ID: 15104
 # Current directory: C:/Users/evanm/Documents/ESIREM/5a/S9/traitements_interfaces/projet/Controller_SRAM_Helle
-# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent7708 C:\Users\evanm\Documents\ESIREM\5a\S9\traitements_interfaces\projet\Controller_SRAM_Helle\Controller_SRAM_Helle.xpr
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent13852 C:\Users\evanm\Documents\ESIREM\5a\S9\traitements_interfaces\projet\Controller_SRAM_Helle\Controller_SRAM_Helle.xpr
 # Log file: C:/Users/evanm/Documents/ESIREM/5a/S9/traitements_interfaces/projet/Controller_SRAM_Helle/vivado.log
 # Journal file: C:/Users/evanm/Documents/ESIREM/5a/S9/traitements_interfaces/projet/Controller_SRAM_Helle\vivado.jou
 # Running On: HuaweiMateBook, OS: Windows, CPU Frequency: 2296 MHz, CPU Physical cores: 8, Host memory: 16040 MB
@@ -63,4 +63,7 @@ Finished scanning sources
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/VIVADO/Vivado/2021.2/data/ip'.
-open_project: Time (s): cpu = 00:00:30 ; elapsed = 00:00:12 . Memory (MB): peak = 1254.359 ; gain = 0.000
+open_project: Time (s): cpu = 00:00:30 ; elapsed = 00:00:12 . Memory (MB): peak = 1253.516 ; gain = 0.000
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Sun Sep 21 16:28:20 2025...
