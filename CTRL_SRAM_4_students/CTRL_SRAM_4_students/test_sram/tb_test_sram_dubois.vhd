@@ -78,18 +78,7 @@ ARCHITECTURE behavior OF tb_test_sram IS
       Zz    : in    std_logic                                   -- Snooze Mode
       );
   end component;
-    
-    component test_io
-    PORT(
-		CLK : IN std_logic;
-		nRESET : IN std_logic;
-		TRIG : IN std_logic;
-		ENTREE : IN std_logic;    
-		E_S : INOUT std_logic;      
-		SORTIE : OUT std_logic
-		);
-	END COMPONENT;
- 
+
 	--constants
   	constant TCLKH    : time := 15 ns;
   	constant TCLKL    : time := 15 ns;
@@ -104,15 +93,12 @@ ARCHITECTURE behavior OF tb_test_sram IS
 	SIGNAL nCE2:  std_logic := '0';
 	SIGNAL CE2:  std_logic := '0';
 	SIGNAL SA :  std_logic_vector(18 downto 0);
-	SIGNAL ENTREE : std_logic_vector(35 downto 0);
-	SIGNAL T : std_logic := '0';
-	SIGNAL reset : std_logic := '0';
 
 	--BiDirs
 	SIGNAL DQ :  std_logic_vector(35 downto 0);
 
-    --Output
-	SIGNAL SORTIE : std_logic_vector(35 downto 0);
+
+	
 
 BEGIN
   process
@@ -127,51 +113,36 @@ BEGIN
   SRAM1 : mt55l512y36f port map
     (DQ, SA, '0', CLKO_SRAM, nCKE, nADVLD, '0',
      '0', '0', '0', nRW, nOE, nCE, nCE2, CE2, '0');
-     
-IOb: for I in 0 to 35 generate
-    Iobx: test_io  port map(
-        CLK => CLKO_SRAM,
-		nRESET => reset,
-		TRIG => T,
-		ENTREE => ENTREE(I),     
-		E_S => DQ(I),      
-		SORTIE => SORTIE(I)
-        );
-end generate;
-    
 
 	tb : PROCESS
 	BEGIN
-	
-	-- init
-    nCKE   <= '1';
-    nADVLD <= '0';
-    nRW    <= '1';
-    nOE    <= '0';-- output enable
-    nCE    <= '0';
-	nCE2   <= '0';
-    CE2    <= '1';
-    SA     <= (others => '0');
-    wait for 50 ns;
+
+	SA 		<= (others => '1');
+	nCKE 		<= '1';
+	nADVLD	<= '0';
+	nRW		<= '1';
+	nOE		<= '0';
+	nCE 		<= '0';
+	nCE2 		<= '0';
+	CE2 		<= '1';
 
 	wait for 1*(TCLKL+TCLKH);
 	SA 		<= "000"&x"0001";
-    nCKE 		<= '0';
-    nRW		<= '0';
-    T <= '0';
+	nCKE 		<= '0';
+   nRW		<= '0';
 	wait for 1*(TCLKL+TCLKH);
-	ENTREE  <= (others => '0');
-    wait for (TCLKH+TCLKL);
-    
-    --relecture 
-    wait for (TCLKH+TCLKL);
-    SA   <= "000" & x"0001";
-    nRW  <= '1';                       -- lecture
-    T <= '1';
-    wait for (TCLKH+TCLKL);
-    nCKE 		<= '0';
-    wait for (TCLKH+TCLKL);
-    nCKE 		<= '1';
+	SA 		<= "000"&x"0002";
+	DQ   <= (others =>'1');
+	nCKE 		<= '0';
+   nRW		<= '1';
+
+	wait for 1*(TCLKL+TCLKH);
+	SA 		<= "000"&x"0001";
+   DQ   <= (others =>'Z');
+   nCKE 		<= '0';
+   nRW		<= '1';
+	wait for 1*(TCLKL+TCLKH);
+   nCKE 		<= '1';
 	wait; -- will wait forever
 	END PROCESS;
 
