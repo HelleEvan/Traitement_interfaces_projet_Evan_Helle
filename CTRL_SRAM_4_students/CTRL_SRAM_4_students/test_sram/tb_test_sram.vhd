@@ -31,6 +31,10 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.std_logic_unsigned.all;
 USE ieee.numeric_std.ALL;
 
+-- synopsys translate_off
+library unisim;
+use unisim.VComponents.all;
+
 ENTITY tb_test_sram IS
 END tb_test_sram ;
 
@@ -79,16 +83,25 @@ ARCHITECTURE behavior OF tb_test_sram IS
       );
   end component;
     
-    component test_io
-    PORT(
-		CLK : IN std_logic;
-		nRESET : IN std_logic;
-		TRIG : IN std_logic;
-		ENTREE : IN std_logic;    
-		E_S : INOUT std_logic;      
-		SORTIE : OUT std_logic
-		);
-	END COMPONENT;
+    component IOBUF_F_16
+  port(
+    O  : out   std_logic;
+    IO : inout std_logic;
+    I  : in    std_logic;
+    T  : in    std_logic
+    );
+end component; 
+
+--    component test_io
+--    PORT(
+--		CLK : IN std_logic;
+--		nRESET : IN std_logic;
+--		TRIG : IN std_logic;
+--		ENTREE : IN std_logic;    
+--		E_S : INOUT std_logic;      
+--		SORTIE : OUT std_logic
+--		);
+--	END COMPONENT;
  
 	--constants
   	constant TCLKH    : time := 15 ns;
@@ -105,7 +118,7 @@ ARCHITECTURE behavior OF tb_test_sram IS
 	SIGNAL CE2:  std_logic := '0';
 	SIGNAL SA :  std_logic_vector(18 downto 0);
 	SIGNAL ENTREE : std_logic_vector(35 downto 0);
-	SIGNAL T : std_logic := '0';
+	SIGNAL Trig : std_logic := '0';
 	SIGNAL reset : std_logic := '0';
 
 	--BiDirs
@@ -129,20 +142,52 @@ BEGIN
      '0', '0', '0', nRW, nOE, nCE, nCE2, CE2, '0');
      
 IOb: for I in 0 to 35 generate
-    Iobx: test_io  port map(
-        CLK => CLKO_SRAM,
-		nRESET => reset,
-		TRIG => T,
-		ENTREE => ENTREE(I),     
-		E_S => DQ(I),      
-		SORTIE => SORTIE(I)
+    Iobx: IOBUF_F_16  port map(
+        O => SORTIE(I),
+        IO => DQ(I),  
+        I => ENTREE(I), 
+		T => Trig
         );
 end generate;
     
 
-	tb : PROCESS
-	BEGIN
+--	tb : PROCESS
+--	BEGIN
 	
+--	-- init
+--    nCKE   <= '1';
+--    nADVLD <= '0';
+--    nRW    <= '1';
+--    nOE    <= '0';-- output enable
+--    nCE    <= '0';
+--	nCE2   <= '0';
+--    CE2    <= '1';
+--    SA     <= (others => '0');
+--    wait for 50 ns;
+
+--    --------------------------------------------------------------------
+--    -- Phase d'écriture
+--    --------------------------------------------------------------------
+--    SA     <= "000" & x"0001";     -- adresse
+--    nRW    <= '0';                 -- write
+--    wait for (TCLKH+TCLKL);
+--    ENTREE <= (others => '1');     -- données à écrire
+--    Trig      <= '0';                 -- IO en mode écriture
+--    wait for (TCLKH+TCLKL);
+
+--    --------------------------------------------------------------------
+--    -- Phase de lecture
+--    --------------------------------------------------------------------
+--    SA     <= "000" & x"0001";     -- même adresse
+--    nRW    <= '1';                 -- read
+--    wait for (TCLKH);
+--    Trig      <= '1';                 -- IO en mode lecture
+--    wait for (TCLKH+TCLKL);
+--	wait; -- will wait forever
+--	END PROCESS;
+
+tb : PROCESS
+	BEGIN
 	-- init
     nCKE   <= '1';
     nADVLD <= '0';
@@ -152,27 +197,35 @@ end generate;
 	nCE2   <= '0';
     CE2    <= '1';
     SA     <= (others => '0');
-    wait for 50 ns;
+    Trig       <='0';
+    ENTREE  <= (others => '0');
 
-	wait for 1*(TCLKL+TCLKH);
+    wait for 50 ns;
+    wait for 1*(TCLKL);
 	SA 		<= "000"&x"0001";
     nCKE 		<= '0';
     nRW		<= '0';
-    T <= '0';
-	wait for 1*(TCLKL+TCLKH);
-	ENTREE  <= (others => '0');
-    wait for (TCLKH+TCLKL);
+    Trig <= '0';
+ 
     
-    --relecture 
-    wait for (TCLKH+TCLKL);
+	wait for 1*(TCLKL+TCLKH);
+	ENTREE  <= ENTREE + 1;
+	nRW		<= '0';
+	SA 		<= "000"&x"0002";
+	wait for 1*(TCLKH);
+    Trig <= '0';
+	--relecture 
+    wait for (TCLKL);
+    ENTREE  <= ENTREE + 1;
     SA   <= "000" & x"0001";
     nRW  <= '1';                       -- lecture
-    T <= '1';
+    wait for 1*(TCLKH);
+    Trig <= '1';
     wait for (TCLKH+TCLKL);
+    Trig <= '1';
     nCKE 		<= '0';
     wait for (TCLKH+TCLKL);
     nCKE 		<= '1';
 	wait; -- will wait forever
 	END PROCESS;
-
 END;

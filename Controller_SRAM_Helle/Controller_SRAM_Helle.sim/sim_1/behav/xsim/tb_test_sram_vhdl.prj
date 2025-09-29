@@ -1,6 +1,5 @@
 # compile vhdl design source files
 vhdl xil_defaultlib  \
-"../../../../../CTRL_SRAM_4_students/CTRL_SRAM_4_students/test_io/iob.vhd" \
 "../../../../../CTRL_SRAM_4_students/CTRL_SRAM_4_students/mt55l512y36f.vhd" \
 "../../../../../CTRL_SRAM_4_students/CTRL_SRAM_4_students/test_sram/tb_test_sram.vhd" \
 

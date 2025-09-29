@@ -31,10 +31,10 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.std_logic_unsigned.all;
 USE ieee.numeric_std.ALL;
 
-ENTITY tb_test_sram IS
-END tb_test_sram ;
+ENTITY db IS
+END db ;
 
-ARCHITECTURE behavior OF tb_test_sram IS 
+ARCHITECTURE arch_db OF db IS 
 
 	-- Component Declaration for the Unit Under Test (UUT)
   component mt55l512y36f is
