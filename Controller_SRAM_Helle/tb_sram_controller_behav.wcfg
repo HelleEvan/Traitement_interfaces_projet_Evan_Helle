@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_sram_controller_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="tb_sram_controller" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="47.560 ns"></ZoomStartTime>
+      <ZoomEndTime time="340.967 ns"></ZoomEndTime>
+      <Cursor1Time time="225.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="208"></NameColumnWidth>
+      <ValueColumnWidth column_width="80"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="27" />
+   <wvobject fp_name="/tb_sram_controller/CLKO_SRAM" type="logic">
+      <obj_property name="ElementShortName">CLKO_SRAM</obj_property>
+      <obj_property name="ObjectShortName">CLKO_SRAM</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/user_Ctrl" type="logic">
+      <obj_property name="ElementShortName">user_Ctrl</obj_property>
+      <obj_property name="ObjectShortName">user_Ctrl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/R_W_enable" type="logic">
+      <obj_property name="ElementShortName">R_W_enable</obj_property>
+      <obj_property name="ObjectShortName">R_W_enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/reset_s" type="logic">
+      <obj_property name="ElementShortName">reset_s</obj_property>
+      <obj_property name="ObjectShortName">reset_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/SRAM_Ctrl/User_Address" type="array">
+      <obj_property name="ElementShortName">User_Address[18:0]</obj_property>
+      <obj_property name="ObjectShortName">User_Address[18:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/SRAM_Ctrl/Addr" type="array">
+      <obj_property name="ElementShortName">Addr[18:0]</obj_property>
+      <obj_property name="ObjectShortName">Addr[18:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Data_in_s" type="array">
+      <obj_property name="ElementShortName">Data_in_s[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Data_in_s[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Data_out_s" type="array">
+      <obj_property name="ElementShortName">Data_out_s[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Data_out_s[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/DQ_s" type="array">
+      <obj_property name="ElementShortName">DQ_s[35:0]</obj_property>
+      <obj_property name="ObjectShortName">DQ_s[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/SRAM_Ctrl/state" type="other">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/nRW_s" type="logic">
+      <obj_property name="ElementShortName">nRW_s</obj_property>
+      <obj_property name="ObjectShortName">nRW_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/nADVLD_s" type="logic">
+      <obj_property name="ElementShortName">nADVLD_s</obj_property>
+      <obj_property name="ObjectShortName">nADVLD_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/nOE_s" type="logic">
+      <obj_property name="ElementShortName">nOE_s</obj_property>
+      <obj_property name="ObjectShortName">nOE_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/nCE_s" type="logic">
+      <obj_property name="ElementShortName">nCE_s</obj_property>
+      <obj_property name="ObjectShortName">nCE_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/nCE2_s" type="logic">
+      <obj_property name="ElementShortName">nCE2_s</obj_property>
+      <obj_property name="ObjectShortName">nCE2_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/CE2_s" type="logic">
+      <obj_property name="ElementShortName">CE2_s</obj_property>
+      <obj_property name="ObjectShortName">CE2_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Lbo_s" type="logic">
+      <obj_property name="ElementShortName">Lbo_s</obj_property>
+      <obj_property name="ObjectShortName">Lbo_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Cke_s" type="logic">
+      <obj_property name="ElementShortName">Cke_s</obj_property>
+      <obj_property name="ObjectShortName">Cke_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Ld_s" type="logic">
+      <obj_property name="ElementShortName">Ld_s</obj_property>
+      <obj_property name="ObjectShortName">Ld_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Bwa_s" type="logic">
+      <obj_property name="ElementShortName">Bwa_s</obj_property>
+      <obj_property name="ObjectShortName">Bwa_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Bwb_s" type="logic">
+      <obj_property name="ElementShortName">Bwb_s</obj_property>
+      <obj_property name="ObjectShortName">Bwb_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Bwc_s" type="logic">
+      <obj_property name="ElementShortName">Bwc_s</obj_property>
+      <obj_property name="ObjectShortName">Bwc_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Bwd_s" type="logic">
+      <obj_property name="ElementShortName">Bwd_s</obj_property>
+      <obj_property name="ObjectShortName">Bwd_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Zz_s" type="logic">
+      <obj_property name="ElementShortName">Zz_s</obj_property>
+      <obj_property name="ObjectShortName">Zz_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/Trig_s" type="logic">
+      <obj_property name="ElementShortName">Trig_s</obj_property>
+      <obj_property name="ObjectShortName">Trig_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/TCLKH" type="other">
+      <obj_property name="ElementShortName">TCLKH</obj_property>
+      <obj_property name="ObjectShortName">TCLKH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/TCLKL" type="other">
+      <obj_property name="ElementShortName">TCLKL</obj_property>
+      <obj_property name="ObjectShortName">TCLKL</obj_property>
+   </wvobject>
+</wave_config>

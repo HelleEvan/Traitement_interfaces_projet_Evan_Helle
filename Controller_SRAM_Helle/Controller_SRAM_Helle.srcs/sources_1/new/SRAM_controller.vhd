@@ -37,128 +37,139 @@ entity SRAM_controller is
            Start :in STD_LOGIC; -- mettre à 1 pour sortir du Idle
            User_Address : in STD_LOGIC_VECTOR (18 downto 0);
            User_Data_in : in STD_LOGIC_VECTOR (31 downto 0);
-           User_Data_out : out STD_LOGIC_VECTOR (35 downto 0);
-           Address : out STD_LOGIC_VECTOR(18 downto 0);
-           Data : inout STD_LOGIC_VECTOR(35 downto 0);
-           reset : in STD_LOGIC);
+           User_Data_out : out STD_LOGIC_VECTOR (31 downto 0);
+           reset : in STD_LOGIC;
+           --ctrl SRAM 
+            Dq    : out    std_logic_vector (35 downto 0);             -- Data I/O
+            Addr  : out    std_logic_vector (18 downto 0);             -- Address
+            Lbo_n : out    std_logic;                                  -- Burst Mode
+            Cke_n : out    std_logic;                                  -- Cke#
+            Ld_n  : out    std_logic;                                  -- Adv/Ld#
+            Bwa_n : out    std_logic;                                  -- Bwa#
+            Bwb_n : out    std_logic;                                  -- BWb#
+            Bwc_n : out    std_logic;                                  -- Bwc#
+            Bwd_n : out    std_logic;                                  -- BWd#
+            Rw_n  : out    std_logic;                                  -- RW#
+            Oe_n  : out    std_logic;                                  -- OE#
+            Ce_n  : out    std_logic;                                  -- CE#
+            Ce2_n : out    std_logic;                                  -- CE2#
+            Ce2   : out    std_logic;                                  -- CE2
+            Zz    : out    std_logic);                                  -- Snooze Mode
 end SRAM_controller;
 
 
 architecture Behavioral of SRAM_controller is
-
-    SIGNAL CLKO_SRAM :  std_logic := '0';
-	SIGNAL nCKE :  std_logic := '0';
-	SIGNAL nADVLD :  std_logic := '0';
-	SIGNAL nRW:  std_logic := '0';
-	SIGNAL nOE:  std_logic := '0';
-	SIGNAL nCE:  std_logic := '0';
-	SIGNAL nCE2:  std_logic := '0';
-	SIGNAL CE2:  std_logic := '0';
-	SIGNAL SA :  std_logic_vector(18 downto 0);
-	SIGNAL ENTREE : std_logic_vector(35 downto 0);
-	SIGNAL Trig : std_logic := '0';
 	
-    signal DATA_whithin : STD_LOGIC_VECTOR (35 downto 0);
+    component IOBUF_F_16
+      port(
+        O  : out   std_logic;
+        IO : inout std_logic;
+        I  : in    std_logic;
+        T  : in    std_logic
+        );
+    end component; 
+    
+    signal Data_out_s : STD_LOGIC_VECTOR (35 downto 0);
+    signal Data_in_s : STD_LOGIC_VECTOR (35 downto 0);
+    signal Dq_s : STD_LOGIC_VECTOR (35 downto 0);
+    signal T_s : STD_LOGIC;
     type StateType is(INIT, IDLE, READ, WRITE);
     signal state : StateType;
-
-component mt55l512y36f is
-    generic (
-      -- Constant parameters
-      addr_bits : integer := 19;
-      data_bits : integer := 36;
-
-      -- Timing parameters for -10 (100 Mhz)
-      tKHKH : time := 10.0 ns;
-      tKHKL : time := 2.5 ns;
-      tKLKH : time := 2.5 ns;
-      tKHQV : time := 5.0 ns;
-      tAVKH : time := 2.0 ns;
-      tEVKH : time := 2.0 ns;
-      tCVKH : time := 2.0 ns;
-      tDVKH : time := 2.0 ns;
-      tKHAX : time := 0.5 ns;
-      tKHEX : time := 0.5 ns;
-      tKHCX : time := 0.5 ns;
-      tKHDX : time := 0.5 ns
-      );
-
-    -- Port Declarations
-    port (
-      Dq    : inout std_logic_vector (data_bits - 1 downto 0);  -- Data I/O
-      Addr  : in    std_logic_vector (addr_bits - 1 downto 0);  -- Address
-      Lbo_n : in    std_logic;                                  -- Burst Mode
-      Clk   : in    std_logic;                                  -- Clk
-      Cke_n : in    std_logic;                                  -- Cke#
-      Ld_n  : in    std_logic;                                  -- Adv/Ld#
-      Bwa_n : in    std_logic;                                  -- Bwa#
-      Bwb_n : in    std_logic;                                  -- BWb#
-      Bwc_n : in    std_logic;                                  -- Bwc#
-      Bwd_n : in    std_logic;                                  -- BWd#
-      Rw_n  : in    std_logic;                                  -- RW#
-      Oe_n  : in    std_logic;                                  -- OE#
-      Ce_n  : in    std_logic;                                  -- CE#
-      Ce2_n : in    std_logic;                                  -- CE2#
-      Ce2   : in    std_logic;                                  -- CE2
-      Zz    : in    std_logic                                   -- Snooze Mode
-      );
-  end component;
   
 -- Instanciation du controleur
 begin
-    process(Clk)
-    begin
-        DATA_whithin <= "0000" & User_Data_in; --Ajout des 4 bits de parités dans à la donnée
-        User_Data_out <= DATA_whithin(31 downto 0); --Renvoie des 32 bits sur la sortie 
-    end process; 
+    IOb: for I in 0 to 35 generate
+    Iobx: IOBUF_F_16  port map(
+        O => Data_out_s(I),
+        IO => Dq_s(I),  
+        I => Data_in_s(I), 
+		T => T_s
+        );
+    end generate;
 
     process(Clk)
+    begin
+        if Clk'EVENT and Clk = '1' then 
+            Data_out_s <= "0000" & User_Data_in; --Ajout des 4 bits de parités dans à la donnée
+            User_Data_out <= Data_in_s(31 downto 0); --Renvoie des 32 bits sur la sortie 
+            Addr <= User_Address; -- recopier l'adresse d'entrée du controller en entrée de la SRAM
+        end if;
+    end process; 
+
+    process(Clk,reset)
     begin 
-        case state is
-            When INIT => 
-                state  <= IDLE;
-                
-            when IDLE =>
-                if Ctrl ='1' AND Start ='1' then 
-                    state <= READ;
-                elsif Ctrl ='0' AND Start ='1' then 
-                    state <= WRITE;
-                else 
-                    state <= IDLE;
-                end if;
-                
-            when READ =>
-                if Ctrl ='1' AND Start ='1' then 
-                    state <= READ;
-                elsif Ctrl ='0' AND Start ='1' then 
-                    state <= WRITE;
-                else 
-                    state <= IDLE;
-                end if;
-                
-            when WRITE =>
-                if Ctrl ='1' AND Start ='1' then 
-                    state <= READ;
-                elsif Ctrl ='0' AND Start ='1' then 
-                    state <= WRITE;
-                else 
-                    state <= IDLE;
-                end if;
-                
-        end case;
+        if reset ='1' then 
+            User_Data_out <=(others  =>'0');
+            Data_in_s <=(others  =>'0');
+            Data_out_s <=(others  =>'0');
+            Dq <=(others  =>'0');
+            Addr <=(others  =>'0');
+            T_s <= '0';
+            state  <= INIT;
+        
+        elsif Clk'EVENT and Clk = '1' then 
+            case state is
+                When INIT => 
+                    state  <= IDLE;
+                    
+                when IDLE =>
+                    if Ctrl ='1' AND Start ='1' then 
+                        state <= READ;
+                    elsif Ctrl ='0' AND Start ='1' then 
+                        state <= WRITE;
+                    else 
+                        state <= IDLE;
+                    end if;
+                    
+                when READ =>
+                    if Ctrl ='1' AND Start ='1' then 
+                        state <= READ;
+                    elsif Ctrl ='0' AND Start ='1' then 
+                        state <= WRITE;
+                    else 
+                        state <= IDLE;
+                    end if;
+                    
+                when WRITE =>
+                    if Ctrl ='1' AND Start ='1' then 
+                        state <= READ;
+                    elsif Ctrl ='0' AND Start ='1' then 
+                        state <= WRITE;
+                    else 
+                        state <= IDLE;
+                    end if;            
+            end case;
+        end if; 
     end process;  
     
     process(state)
     begin 
         case state is
             When INIT => 
-                --sorties!!!
+                --sorties crtl sram constantes :
+            Lbo_n  <='0';                                 -- Burst Mode non instancier pour l'instant
+            Ld_n   <='0';                                 -- Adv/Ld# =0 sinon burst actif
+            Cke_n  <='0';                                 -- Clock enable
+            Bwa_n  <='0';                                 -- Bwa#
+            Bwb_n  <='0';                                 -- BWb#
+            Bwc_n  <='0';                                 -- Bwc#
+            Bwd_n  <='0';                                 -- BWd#                                 
+            Zz     <='0';                                 -- Snooze Mode;
+            Oe_n   <= '0';                                  -- OE#
+            Ce_n  <= '0';                                  -- CE#
+            Ce2_n <= '0';                                 -- CE2#
+            Ce2   <= '1';                                  -- Addr 
             when IDLE =>
      
             when READ =>
-                
+                Rw_n <= '1'; -- on assignera cette valeur au trigg de la SRAM par la suite
+                T_s  <='1';
+
             when WRITE =>
+                Rw_n <= '0';
+                T_s  <='0';
                 
         end case;
     end process;  
+    Dq <= Dq_s;
 end Behavioral;
