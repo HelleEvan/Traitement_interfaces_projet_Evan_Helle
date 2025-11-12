@@ -119,7 +119,6 @@ end component;
     SIGNAL Data_out_s :  STD_LOGIC_VECTOR (31 downto 0);
     SIGNAL reset_s :  std_logic := '0';
     
-	SIGNAL nADVLD_s :  std_logic;
 	SIGNAL nRW_s:  std_logic;
 	SIGNAL nOE_s:  std_logic;
 	SIGNAL nCE_s:  std_logic;
