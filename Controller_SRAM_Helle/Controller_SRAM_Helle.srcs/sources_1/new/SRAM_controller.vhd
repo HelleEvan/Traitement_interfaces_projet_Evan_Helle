@@ -96,7 +96,7 @@ begin
     process(Clk)
     begin
         if Clk'EVENT and Clk = '1' then 
-            --decalage de la donnée de deux fronts
+            --decalage de la donnée de deux fronts montant
             decalage_data_in_1 <= User_Data_in ;
             decalage_data_in_2 <= decalage_data_in_1;
             
@@ -106,7 +106,7 @@ begin
     
         process(Clk)
     begin
-        if Clk'EVENT and Clk = '0' then      
+        if Clk'EVENT and Clk = '0' then -- sur front descendant
             Data_in_s <= "0000" & decalage_data_in_2; --Ajout des 4 bits de parités dans à la donnée
             User_Data_out <= Data_out_s(31 downto 0); --Renvoie des 32 bits sur la sortie 
         end if;

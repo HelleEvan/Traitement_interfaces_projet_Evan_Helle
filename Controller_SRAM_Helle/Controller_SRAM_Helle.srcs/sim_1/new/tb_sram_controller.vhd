@@ -183,15 +183,15 @@ process
 	   R_W_enable <='1';
 	   --nRW_s    <= '1';
 	   
-	   wait for 1*(TCLKH);
+	   wait for 2*(TCLKH);
 	   reset_s <= '0';
 	   
-	   wait for 0.5*(TCLKH);
+	   wait for 1*(TCLKH);
 	   Data_in_s <= (others => '1');
-	   wait for 0.5*(TCLKH);
+	   wait for 1*(TCLKH);
 	   Addr_in_s <= (others => '0');
 	   
-	   wait for 1*(TCLKH);
+	   wait for 2*(TCLKH); --write
 	   user_Ctrl <= '0';
 	   R_W_enable <='1';
 	   --nRW_s    <= '0';
@@ -201,7 +201,39 @@ process
 	   R_W_enable <='0';
 	   --nRW_s    <= '0';
 	   
-	   wait for 1*(TCLKH);--read
+	   wait for 2*(TCLKH);--read
+	   user_Ctrl <= '1';
+	   R_W_enable <='1';
+	   --nRW_s    <= '1';
+	  
+	   wait for 1*(TCLKH);
+	   Data_in_s <= (others => '0');
+	   wait for 1*(TCLKH);
+	   Addr_in_s <= (others => '1');
+	   
+	   wait for 2*(TCLKH); --write
+	   user_Ctrl <= '0';
+	   R_W_enable <='1';
+	   --nRW_s    <= '0';
+	   
+	   wait for 2*(TCLKH); --Idle
+	   user_Ctrl <= '0';
+	   R_W_enable <='0';
+	   --nRW_s    <= '0';
+	   
+	   wait for 2*(TCLKH);--read
+	   user_Ctrl <= '1';
+	   R_W_enable <='1';
+	   --nRW_s    <= '1';
+	   
+	   
+	   wait for 2*(TCLKH); --Idle
+	   Addr_in_s <= (others => '0');
+	   user_Ctrl <= '0';
+	   R_W_enable <='0';
+	   --nRW_s    <= '0';
+	   
+	   wait for 2*(TCLKH);--read
 	   user_Ctrl <= '1';
 	   R_W_enable <='1';
 	   --nRW_s    <= '1';
