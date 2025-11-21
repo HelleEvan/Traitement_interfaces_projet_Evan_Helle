@@ -30,6 +30,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
+-- synopsys translate_off
+library unisim;
+use unisim.VComponents.all;
+-- synopsys translate_on
 
 entity SRAM_controller is
     Port ( Clk : in STD_LOGIC;
@@ -54,7 +58,7 @@ entity SRAM_controller is
             Ce_n  : out    std_logic;                                  -- CE#
             Ce2_n : out    std_logic;                                  -- CE2#
             Ce2   : out    std_logic;                                  -- CE2
-            Zz    : out    std_logic);                                  -- Snooze Mode
+            Zz    : out    std_logic);                                 -- Snooze Mode
 end SRAM_controller;
 
 
@@ -96,21 +100,26 @@ begin
             decalage_data_in_1 <= User_Data_in ;
             decalage_data_in_2 <= decalage_data_in_1;
             
-            Data_out_s <= "0000" & decalage_data_in_2; --Ajout des 4 bits de parités dans à la donnée
-            User_Data_out <= Data_in_s(31 downto 0); --Renvoie des 32 bits sur la sortie 
             Addr <= User_Address; -- recopier l'adresse d'entrée du controller en entrée de la SRAM
+        end if;
+    end process; 
+    
+        process(Clk)
+    begin
+        if Clk'EVENT and Clk = '0' then      
+            Data_in_s <= "0000" & decalage_data_in_2; --Ajout des 4 bits de parités dans à la donnée
+            User_Data_out <= Data_out_s(31 downto 0); --Renvoie des 32 bits sur la sortie 
         end if;
     end process; 
 
     process(Clk,reset)
     begin 
         if reset ='1' then 
-            User_Data_out <=(others  =>'0');
-            Data_in_s <=(others  =>'0');
-            Data_out_s <=(others  =>'0');
-            Dq <=(others  =>'0');
-            Addr <=(others  =>'0');
-            T_s <= '0';
+            --User_Data_out <=(others  =>'0');
+            --Data_in_s <=(others  =>'0');
+            --Data_out_s <=(others  =>'0');
+            --Dq <=(others  =>'0');
+            --Addr <=(others  =>'0');
             state  <= INIT;
         
         elsif Clk'EVENT and Clk = '1' then 
@@ -146,29 +155,30 @@ begin
                     end if;            
             end case;
         end if; 
-    end process;  
+    end process;
     
     process(state)
     begin 
         case state is
             When INIT => 
                 --sorties crtl sram constantes :
-            Lbo_n  <='0';                                 -- Burst Mode non instancier pour l'instant
-            Ld_n   <='0';                                 -- Adv/Ld# =0 sinon burst actif
-            Cke_n  <='0';                                 -- Clock enable
-            Bwa_n  <='0';                                 -- Bwa#
-            Bwb_n  <='0';                                 -- BWb#
-            Bwc_n  <='0';                                 -- Bwc#
-            Bwd_n  <='0';                                 -- BWd#                                 
-            Zz     <='0';                                 -- Snooze Mode;
-            Oe_n   <= '0';                                -- OE#
-            Ce_n  <= '0';                                 -- CE#
-            Ce2_n <= '0';                                 -- CE2#
-            Ce2   <= '1';                                 -- Addr 
-            Rw_n <='0';
-            T_s <='0';
+                Lbo_n  <='0';                                 -- Burst Mode non instancier pour l'instant
+                Ld_n   <='0';                                 -- Adv/Ld# =0 sinon burst actif
+                Cke_n  <='0';                                 -- Clock enable
+                Bwa_n  <='0';                                 -- Bwa#
+                Bwb_n  <='0';                                 -- BWb#
+                Bwc_n  <='0';                                 -- Bwc#
+                Bwd_n  <='0';                                 -- BWd#                                 
+                Zz     <='0';                                 -- Snooze Mode;
+                Oe_n   <= '0';                                -- OE#
+                Ce_n  <= '0';                                 -- CE#
+                Ce2_n <= '0';                                 -- CE2#
+                Ce2   <= '1';                                 -- Addr 
+                Rw_n <='0';
+                T_s <='0';
+                Rw_n <= '1'; --protection materiel
             when IDLE =>
-     
+                Rw_n <= '1'; --protection materiel
             when READ =>
                 Rw_n <= '1'; -- on assignera cette valeur au trigg de la SRAM par la suite
                 T_s  <='1';

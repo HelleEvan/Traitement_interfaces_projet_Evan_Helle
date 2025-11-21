@@ -132,7 +132,6 @@ end component;
 	SIGNAL Bwc_s:  std_logic;
 	SIGNAL Bwd_s:  std_logic;
 	SIGNAL Zz_s:  std_logic;
-	SIGNAL Trig_s : std_logic;
 	SIGNAL DQ_s :  std_logic_vector(35 downto 0);
 
 begin
@@ -172,40 +171,41 @@ process
         Zz    => Zz_s);                                 -- Snooze Mode;
 	
     SRAM1 : mt55l512y36f port map
-        (DQ_s, Addr_out_s, '0', CLKO_SRAM, Cke_s, Ld_s, '0',
+        (DQ_s, Addr_out_s, Lbo_s, CLKO_SRAM, Cke_s, Ld_s, '0',
         '0', '0', '0', nRW_s, nOE_s, nCE_s, nCE2_s, CE2_s, '0');
 
     tb : PROCESS
 	BEGIN
 	   reset_s <= '1';
         
-	   wait for 5.8*(TCLKH);
-	   Data_in_s <= (others => '1');
-	   Addr_in_s <= (others => '0');
-	   user_Ctrl <= '1';
-	   Trig_s <= '1';
+	   wait for 5.8*(TCLKH); --init
+	   user_Ctrl <= '0';
 	   R_W_enable <='1';
 	   --nRW_s    <= '1';
 	   
 	   wait for 1*(TCLKH);
 	   reset_s <= '0';
-	   wait for 5*(TCLKH);
+	   
+	   wait for 0.5*(TCLKH);
+	   Data_in_s <= (others => '1');
+	   wait for 0.5*(TCLKH);
+	   Addr_in_s <= (others => '0');
+	   
+	   wait for 1*(TCLKH);
+	   user_Ctrl <= '0';
+	   R_W_enable <='1';
+	   --nRW_s    <= '0';
+	   
+	   wait for 2*(TCLKH); --Idle
+	   user_Ctrl <= '0';
+	   R_W_enable <='0';
+	   --nRW_s    <= '0';
+	   
+	   wait for 1*(TCLKH);--read
 	   user_Ctrl <= '1';
-	   Trig_s <= '0';
-	   R_W_enable <='0';
-	   --nRW_s    <= '0';
-	   
-	   wait for 1*(TCLKH);
-	   user_Ctrl <= '0';
-	   Trig_s <= '0';
-	   R_W_enable <='0';
-	   --nRW_s    <= '0';
-	   
-	   wait for 1*(TCLKH);
-	   user_Ctrl <= '0';
-	   Trig_s <= '1';
 	   R_W_enable <='1';
 	   --nRW_s    <= '1';
+	  
 	   wait;
 	END PROCESS;
 
