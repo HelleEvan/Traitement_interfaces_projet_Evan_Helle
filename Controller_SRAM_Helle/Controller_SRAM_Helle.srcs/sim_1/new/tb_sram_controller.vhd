@@ -107,8 +107,8 @@ end component;
   end component;
 
 	--constants
-  	constant TCLKH    : time := 15 ns;
-  	constant TCLKL    : time := 15 ns;
+  	constant TCLKH    : time := 10 ns;
+  	constant TCLKL    : time := 10 ns;
   	--input
     SIGNAL CLKO_SRAM :  std_logic := '0';
     SIGNAL user_Ctrl :  std_logic := '0';
@@ -178,65 +178,65 @@ process
 	BEGIN
 	   reset_s <= '1';
         
-	   wait for 5.8*(TCLKH); --init
+	   wait for 11*(TCLKH); --init
 	   user_Ctrl <= '0';
-	   R_W_enable <='1';
+	   R_W_enable <='0';
 	   --nRW_s    <= '1';
 	   
-	   wait for 2*(TCLKH);
+	   wait for 1.5*(TCLKH+TCLKL);
 	   reset_s <= '0';
 	   
-	   wait for 1*(TCLKH);
+	   wait for 1.5*(TCLKH+TCLKL);
 	   Data_in_s <= (others => '1');
 	   wait for 1*(TCLKH);
 	   Addr_in_s <= (others => '0');
 	   
-	   wait for 2*(TCLKH); --write
+	   wait for 1.5*(TCLKH+TCLKL); --write
 	   user_Ctrl <= '0';
 	   R_W_enable <='1';
 	   --nRW_s    <= '0';
 	   
-	   wait for 2*(TCLKH); --Idle
+	   wait for 1.5*(TCLKH+TCLKL); --Idle
 	   user_Ctrl <= '0';
 	   R_W_enable <='0';
 	   --nRW_s    <= '0';
 	   
-	   wait for 2*(TCLKH);--read
+	   wait for 1.5*(TCLKH+TCLKL);--read
 	   user_Ctrl <= '1';
 	   R_W_enable <='1';
 	   --nRW_s    <= '1';
 	  
-	   wait for 1*(TCLKH);
-	   Data_in_s <= (others => '0');
-	   wait for 1*(TCLKH);
-	   Addr_in_s <= (others => '1');
-	   
-	   wait for 2*(TCLKH); --write
-	   user_Ctrl <= '0';
-	   R_W_enable <='1';
-	   --nRW_s    <= '0';
-	   
-	   wait for 2*(TCLKH); --Idle
+	   wait for 3*(TCLKH+TCLKL); --Idle
 	   user_Ctrl <= '0';
 	   R_W_enable <='0';
 	   --nRW_s    <= '0';
 	   
-	   wait for 2*(TCLKH);--read
+	   wait for 1*(TCLKH+TCLKL);
+	   Data_in_s <= (others => '0');
+	   wait for 1*(TCLKH+TCLKL);
+	   Addr_in_s <= (others => '1');
+	   
+	   wait for 1.25*(TCLKH+TCLKL); --write
+	   user_Ctrl <= '0';
+	   R_W_enable <='1';
+	   --nRW_s    <= '0';
+	   
+	   wait for 1.25*(TCLKH+TCLKL); --Idle
+	   user_Ctrl <= '0';
+	   R_W_enable <='0';
+	   --nRW_s    <= '0';
+	   
+	   wait for 1.25*(TCLKH+TCLKL);--read
 	   user_Ctrl <= '1';
 	   R_W_enable <='1';
 	   --nRW_s    <= '1';
 	   
 	   
-	   wait for 2*(TCLKH); --Idle
+	   wait for 1.25*(TCLKH+TCLKL); --Idle
 	   Addr_in_s <= (others => '0');
 	   user_Ctrl <= '0';
 	   R_W_enable <='0';
 	   --nRW_s    <= '0';
-	   
-	   wait for 2*(TCLKH);--read
-	   user_Ctrl <= '1';
-	   R_W_enable <='1';
-	   --nRW_s    <= '1';
 	  
 	   wait;
 	END PROCESS;

@@ -10,13 +10,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="130.480 ns"></ZoomStartTime>
-      <ZoomEndTime time="280.681 ns"></ZoomEndTime>
-      <Cursor1Time time="210.000 ns"></Cursor1Time>
+      <ZoomStartTime time="168.630 ns"></ZoomStartTime>
+      <ZoomEndTime time="716.941 ns"></ZoomEndTime>
+      <Cursor1Time time="510.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="208"></NameColumnWidth>
-      <ValueColumnWidth column_width="72"></ValueColumnWidth>
+      <NameColumnWidth column_width="184"></NameColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="32" />
    <wvobject fp_name="/tb_sram_controller/CLKO_SRAM" type="logic">
