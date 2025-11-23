@@ -1,0 +1,16 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{StartDefaultTask}\PYG{p}{(}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{o}{*}\PYG{n}{argument}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{c+cm}{/* USER CODE BEGIN 5 */}
+\PYG{+w}{  }\PYG{c+cm}{/* Infinite loop */}
+\PYG{+w}{  }\PYG{k}{for}\PYG{p}{(;;)}
+\PYG{+w}{  }\PYG{p}{\PYGZob{}}
+\PYG{+w}{	  }\PYG{n}{HAL\PYGZus{}GPIO\PYGZus{}WritePin}\PYG{p}{(}\PYG{n}{GPIOB}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{GPIO\PYGZus{}PIN\PYGZus{}0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{GPIO\PYGZus{}PIN\PYGZus{}SET}\PYG{p}{);}
+\PYG{+w}{	  }\PYG{n}{HAL\PYGZus{}Delay}\PYG{p}{(}\PYG{l+m+mi}{100}\PYG{p}{);}
+\PYG{+w}{	  }\PYG{n}{HAL\PYGZus{}GPIO\PYGZus{}TogglePin}\PYG{p}{(}\PYG{n}{GPIOB}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{GPIO\PYGZus{}PIN\PYGZus{}0}\PYG{p}{);}
+\PYG{+w}{	  }\PYG{n}{HAL\PYGZus{}Delay}\PYG{p}{(}\PYG{l+m+mi}{100}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{osDelay}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{c+cm}{/* USER CODE END 5 */}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

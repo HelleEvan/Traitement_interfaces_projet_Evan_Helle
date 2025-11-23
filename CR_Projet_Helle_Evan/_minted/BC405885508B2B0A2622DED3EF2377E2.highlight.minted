@@ -1,0 +1,27 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{    }\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Blinks}\PYG{p}{\PYGZob{}}
+\PYG{+w}{	}\PYG{k+kt}{uint16\PYGZus{}t}\PYG{+w}{ }\PYG{n}{pin}\PYG{p}{;}
+\PYG{+w}{	}\PYG{k+kt}{int16\PYGZus{}t}\PYG{+w}{ }\PYG{n}{delay}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{Blink}\PYG{p}{(}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{o}{*}\PYG{n}{argument}\PYG{p}{)\PYGZob{}}
+\PYG{+w}{	}\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Blinks}\PYG{+w}{ }\PYG{o}{*}\PYG{n}{parametre}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Blinks}\PYG{+w}{ }\PYG{o}{*}\PYG{p}{)}\PYG{n}{argument}\PYG{p}{;}
+
+\PYG{+w}{	}\PYG{k}{while}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)\PYGZob{}}
+\PYG{+w}{		}\PYG{n}{HAL\PYGZus{}GPIO\PYGZus{}WritePin}\PYG{p}{(}\PYG{n}{GPIOB}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{parametre}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{pin}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{GPIO\PYGZus{}PIN\PYGZus{}SET}\PYG{p}{);}
+\PYG{+w}{		}\PYG{n}{vTaskDelay}\PYG{p}{(}\PYG{n}{pdMS\PYGZus{}TO\PYGZus{}TICKS}\PYG{p}{(}\PYG{n}{parametre}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{delay}\PYG{p}{));}
+\PYG{+w}{		}\PYG{n}{HAL\PYGZus{}GPIO\PYGZus{}TogglePin}\PYG{p}{(}\PYG{n}{GPIOB}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{parametre}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{pin}\PYG{p}{);}
+\PYG{+w}{		}\PYG{n}{vTaskDelay}\PYG{p}{(}\PYG{n}{pdMS\PYGZus{}TO\PYGZus{}TICKS}\PYG{p}{(}\PYG{n}{parametre}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{delay}\PYG{p}{));}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Blinks}\PYG{+w}{ }\PYG{n}{led1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{GPIO\PYGZus{}PIN\PYGZus{}0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{500}\PYG{p}{\PYGZcb{};}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Blinks}\PYG{+w}{ }\PYG{n}{led2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{GPIO\PYGZus{}PIN\PYGZus{}1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{700}\PYG{p}{\PYGZcb{};}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Blinks}\PYG{+w}{ }\PYG{n}{led3}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{GPIO\PYGZus{}PIN\PYGZus{}2}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1000}\PYG{p}{\PYGZcb{};}
+
+\PYG{n}{xTaskCreate}\PYG{p}{(}\PYG{n}{Blink}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Led1\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{32}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{led1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{NULL}\PYG{p}{);}
+\PYG{n}{xTaskCreate}\PYG{p}{(}\PYG{n}{Blink}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Led2\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{32}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{led2}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{NULL}\PYG{p}{);}
+\PYG{n}{xTaskCreate}\PYG{p}{(}\PYG{n}{Blink}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Led3\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{32}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{led3}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{NULL}\PYG{p}{);}
+
+\PYG{n}{vTaskStartScheduler}\PYG{p}{();}\PYG{+w}{ }\PYG{c+c1}{//demarrer l\PYGZsq{}ordonnanceur}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}
