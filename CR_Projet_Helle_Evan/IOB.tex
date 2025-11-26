@@ -38,20 +38,93 @@ D'après l'ennoncé du projet et la datasheet de la SRAM, il est nécessaire d'a
 
 \subsubsection{Code}
 
+Pour le code du test bench, je nous sommes partie sur une ecriture de donnée à l'adresse 1 et 2, puis une lecture de ces deux adresses.\\
+
+% - Code source avec minted - %
+\begin{minted}[frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor = lightgray,
+    fontsize=\footnotesize,
+    linenos
+    ]{VHDL}
+tb : PROCESS
+BEGIN
+-- init
+nCKE    <= '0';
+nADVLD  <= '0';
+nOE     <= '0';-- output enable
+nCE     <= '0';
+nCE2    <= '0';
+CE2     <= '1';
+SA      <= (others => '0');
+Trig    <='1'; -- se mettre en "lecture" le temps de l'init pour ne pas ecrire n'importe quoi 
+
+wait for 6*(TCLKL+TCLKH);
+SA 		<= "000"&x"0001";
+Trig    <= '0'; -- ecriture à l'adresse 1
+wait for 1*(TCLKL); -- pour travailler sur front montant
+ENTREE  <= (others => '1'); -- decalage de la donnée d'un cycle 
+                            --par rapport à l'adresse et la commande
+ 
+   
+wait for 2*(TCLKL+TCLKH);
+SA 		<= "000"&x"0002"; -- eriture à l'adress 2
+wait for 1*(TCLKL+TCLKH);
+ENTREE  <= ENTREE + 1;-- decalage de la donnée d'un cycle par
+                      -- rapport à l'adresse et la commande
+    
+wait for 2*(TCLKH+TCLKL);
+SA 		<= "000"&x"0001"; -- lecture à l'adresse 1
+Trig <= '1';
+wait for 2*(TCLKH+TCLKL);
+SA 		<= "000"&x"0002"; -- lecture à l'adresse 2
+
+wait; -- will wait forever
+END PROCESS;
+\end{minted}
+
+Ici la donnée est bien décalée d'un cycle par rapport à l'adresse et la commande.\\
+Quand le trigger est à 0, on est en écriture, et quand il est à 1, on est en lecture. C'est le cas pour la SRAM et l'IO buffer. Donc nous avons connecter par un fil ces deux I/O.\\
+
+% - Code source avec minted - %
+\begin{minted}[frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor = lightgray,
+    fontsize=\footnotesize,
+    linenos
+    ]{VHDL}
+SRAM1 : mt55l512y36f port map
+(DQ, SA, '0', CLKO_SRAM, nCKE, nADVLD, '0',
+'0', '0', '0', Trig, nOE, nCE, nCE2, CE2, '0');
+
+IOb: for I in 0 to 35 generate
+Iobx: IOBUF_F_16  port map(
+O => SORTIE(I),
+IO => DQ(I),  
+I => ENTREE(I), 
+T => Trig
+);
+end generate;
+\end{minted}
 
 \subsubsection{Simulation}
 
-
+Voici le résultat de la simulation :\\
 % - Image - %
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{Image/sim_IOB.png}
+\includegraphics[width=1\textwidth]{Image/sim_IOB.png}
 \caption{Simulation IO Buffer}
 \end{figure}
+Les données sont bien écrites aux bonnes adresses (1 et 2) et lues correctement par la suite.\\
+Au passage à la lecture, le bus bidirectionnel passe en haute impédance, ce qui est le comportement attendu.\\
+Voici un zoom sur le passage en haute impédance :\\
 
 % - Image - %
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{Image/sim_IOB_ZZZ.png}
+\includegraphics[width=1\textwidth]{Image/sim_IOB_ZZZ.png}
 \caption{Haute impédance à la lecture de la donnée}
 \end{figure}

@@ -1,0 +1,36 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{n}{tb}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{k}{PROCESS}
+\PYG{k}{BEGIN}
+\PYG{c+c1}{\PYGZhy{}\PYGZhy{} init}
+\PYG{n}{nCKE}\PYG{+w}{    }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{n}{nADVLD}\PYG{+w}{  }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{n}{nOE}\PYG{+w}{     }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}\PYG{c+c1}{\PYGZhy{}\PYGZhy{} output enable}
+\PYG{n}{nCE}\PYG{+w}{     }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{n}{nCE2}\PYG{+w}{    }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{n}{CE2}\PYG{+w}{     }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{n}{SA}\PYG{+w}{      }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{others}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{);}
+\PYG{n}{Trig}\PYG{+w}{    }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} se mettre en \PYGZdq{}lecture\PYGZdq{} le temps de l\PYGZsq{}init pour ne pas ecrire n\PYGZsq{}importe quoi}
+
+\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKL}\PYG{o}{+}\PYG{n}{TCLKH}\PYG{p}{);}
+\PYG{n}{SA}\PYG{+w}{ 		}\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}000\PYGZdq{}}\PYG{o}{\PYGZam{}}\PYG{l+m+mh}{x\PYGZdq{}0001\PYGZdq{}}\PYG{p}{;}
+\PYG{n}{Trig}\PYG{+w}{    }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} ecriture à l\PYGZsq{}adresse 1}
+\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKL}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} pour travailler sur front montant}
+\PYG{n}{ENTREE}\PYG{+w}{  }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{others}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} decalage de la donnée d\PYGZsq{}un cycle}
+\PYG{+w}{                            }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}par rapport à l\PYGZsq{}adresse et la commande}
+
+
+\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKL}\PYG{o}{+}\PYG{n}{TCLKH}\PYG{p}{);}
+\PYG{n}{SA}\PYG{+w}{ 		}\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}000\PYGZdq{}}\PYG{o}{\PYGZam{}}\PYG{l+m+mh}{x\PYGZdq{}0002\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} eriture à l\PYGZsq{}adress 2}
+\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKL}\PYG{o}{+}\PYG{n}{TCLKH}\PYG{p}{);}
+\PYG{n}{ENTREE}\PYG{+w}{  }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{ENTREE}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{c+c1}{\PYGZhy{}\PYGZhy{} decalage de la donnée d\PYGZsq{}un cycle par}
+\PYG{+w}{                      }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} rapport à l\PYGZsq{}adresse et la commande}
+
+\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKH}\PYG{o}{+}\PYG{n}{TCLKL}\PYG{p}{);}
+\PYG{n}{SA}\PYG{+w}{ 		}\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}000\PYGZdq{}}\PYG{o}{\PYGZam{}}\PYG{l+m+mh}{x\PYGZdq{}0001\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} lecture à l\PYGZsq{}adresse 1}
+\PYG{n}{Trig}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKH}\PYG{o}{+}\PYG{n}{TCLKL}\PYG{p}{);}
+\PYG{n}{SA}\PYG{+w}{ 		}\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}000\PYGZdq{}}\PYG{o}{\PYGZam{}}\PYG{l+m+mh}{x\PYGZdq{}0002\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} lecture à l\PYGZsq{}adresse 2}
+
+\PYG{k}{wait}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} will wait forever}
+\PYG{k}{END}\PYG{+w}{ }\PYG{k}{PROCESS}\PYG{p}{;}
+\end{MintedVerbatim}
