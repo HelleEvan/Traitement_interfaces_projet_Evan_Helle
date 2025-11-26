@@ -111,7 +111,7 @@ end component;
 	SIGNAL CLKO_SRAM :  std_logic := '0';
 	SIGNAL nCKE :  std_logic := '0';
 	SIGNAL nADVLD :  std_logic := '0';
-	SIGNAL nRW:  std_logic := '0';
+	--SIGNAL nRW:  std_logic := '0'; plus utile, on met trig de l'io buff à la place
 	SIGNAL nOE:  std_logic := '0';
 	SIGNAL nCE:  std_logic := '0';
 	SIGNAL nCE2:  std_logic := '0';
@@ -139,7 +139,7 @@ BEGIN
 	-- Instantiate the Unit Under Test (UUT)
   SRAM1 : mt55l512y36f port map
     (DQ, SA, '0', CLKO_SRAM, nCKE, nADVLD, '0',
-     '0', '0', '0', nRW, nOE, nCE, nCE2, CE2, '0');
+     '0', '0', '0', Trig, nOE, nCE, nCE2, CE2, '0');
      
 IOb: for I in 0 to 35 generate
     Iobx: IOBUF_F_16  port map(
@@ -149,83 +149,37 @@ IOb: for I in 0 to 35 generate
 		T => Trig
         );
 end generate;
-    
-
---	tb : PROCESS
---	BEGIN
-	
---	-- init
---    nCKE   <= '1';
---    nADVLD <= '0';
---    nRW    <= '1';
---    nOE    <= '0';-- output enable
---    nCE    <= '0';
---	nCE2   <= '0';
---    CE2    <= '1';
---    SA     <= (others => '0');
---    wait for 50 ns;
-
---    --------------------------------------------------------------------
---    -- Phase d'écriture
---    --------------------------------------------------------------------
---    SA     <= "000" & x"0001";     -- adresse
---    nRW    <= '0';                 -- write
---    wait for (TCLKH+TCLKL);
---    ENTREE <= (others => '1');     -- données à écrire
---    Trig      <= '0';                 -- IO en mode écriture
---    wait for (TCLKH+TCLKL);
-
---    --------------------------------------------------------------------
---    -- Phase de lecture
---    --------------------------------------------------------------------
---    SA     <= "000" & x"0001";     -- même adresse
---    nRW    <= '1';                 -- read
---    wait for (TCLKH);
---    Trig      <= '1';                 -- IO en mode lecture
---    wait for (TCLKH+TCLKL);
---	wait; -- will wait forever
---	END PROCESS;
 
 tb : PROCESS
 	BEGIN
 	-- init
-    nCKE   <= '1';
-    nADVLD <= '0';
-    nRW    <= '1';
-    nOE    <= '0';-- output enable
-    nCE    <= '0';
-	nCE2   <= '0';
-    CE2    <= '1';
-    SA     <= (others => '0');
-    Trig       <='0';
-    ENTREE  <= (others => '0');
+    nCKE    <= '0';
+    nADVLD  <= '0';
+    nOE     <= '0';-- output enable
+    nCE     <= '0';
+	nCE2    <= '0';
+    CE2     <= '1';
+    SA      <= (others => '0');
+    Trig    <='1'; -- se mettre en "lecture" le temps de l'init pour ne pas ecrire n'importe quoi 
 
-    wait for 50 ns;
-    wait for 1*(TCLKL);
-	SA 		<= "000"&x"0001";
-    nCKE 		<= '0';
-    nRW		<= '0';
-    Trig <= '0';
+    wait for 6*(TCLKL+TCLKH);
+    SA 		<= "000"&x"0001";
+    Trig    <= '0'; -- ecriture à l'adresse 1
+    wait for 1*(TCLKL); -- pour travailler sur front montant
+	ENTREE  <= (others => '1'); -- decalage de la donnée d'un cycle par rapport à l'adresse et la commande
  
-    
+   
+	wait for 2*(TCLKL+TCLKH);
+	SA 		<= "000"&x"0002"; -- eriture à l'adress 2
 	wait for 1*(TCLKL+TCLKH);
-	ENTREE  <= ENTREE + 1;
-	nRW		<= '0';
-	SA 		<= "000"&x"0002";
-	wait for 1*(TCLKH);
-    Trig <= '0';
-	--relecture 
-    wait for (TCLKL);
-    ENTREE  <= ENTREE + 1;
-    SA   <= "000" & x"0001";
-    nRW  <= '1';                       -- lecture
-    wait for 1*(TCLKH);
+	ENTREE  <= ENTREE + 1;-- decalage de la donnée d'un cycle par rapport à l'adresse et la commande
+          
+    wait for 2*(TCLKH+TCLKL);
+    SA 		<= "000"&x"0001"; -- lecture à l'adresse 1
     Trig <= '1';
-    wait for (TCLKH+TCLKL);
-    Trig <= '1';
-    nCKE 		<= '0';
-    wait for (TCLKH+TCLKL);
-    nCKE 		<= '1';
+    wait for 2*(TCLKH+TCLKL);
+    SA 		<= "000"&x"0002"; -- lecture à l'adresse 2
+    
 	wait; -- will wait forever
-	END PROCESS;
+END PROCESS;
 END;

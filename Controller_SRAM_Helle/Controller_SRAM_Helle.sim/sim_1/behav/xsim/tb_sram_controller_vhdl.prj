@@ -1,8 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../Controller_SRAM_Helle.srcs/sources_1/new/SRAM_controller.vhd" \
-"../../../../../CTRL_SRAM_4_students/CTRL_SRAM_4_students/mt55l512y36f.vhd" \
-"../../../../Controller_SRAM_Helle.srcs/sim_1/new/tb_sram_controller.vhd" \
-
-# Do not sort compile order
-nosort

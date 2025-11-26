@@ -1,6 +1,57 @@
 \section{IO Buffer}
 
+\subsection{Fonctionnement}
+
+Un IO Buffer est un composant matériel utilisé dans les circuits pour gérer les signaux d'entrée et de sortie entre le circuit et le monde extérieur.\\
+L'implémentation de L'IO Buffer que nous allons utilisé nous nous a été fourni.\\
+
+Voici la représentation schématique de l'IO Buffer que nous allons utilisé dans notre projet :\\
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Image/IOB.jpeg}
+\caption{IO buffer}
+\end{figure}
+
+L'IO Buffer est composé de plusieurs entrées et sorties :\\
+\begin{itemize}
+    \item \textbf{I} : Donnée d'entrée (input data)
+    \item \textbf{O} : Donnée de sortie (output data)
+    \item \textbf{T} : Trigger, permet de contrôler le mode de l'IO Buffer (entrée ou sortie qui servira à gerer l'ecriture ou la lecture dans notre cas)
+    \item \textbf{IO} : Bus de données bidirectionnel (data bus)
+\end{itemize}
+
+\subsection{Test Bench}
+
+L'objectif de faire un test bench est de vérifier le bon fonctionnement de l'IO Buffer avec la SRAM.\\
+De plus cela premettra de de comprendre son fonctionnement avant de l'intégrer dans le projet final.\\
+Il est important de faire ce test car il est nécessaire d'avoir un décalage entre la donnée et les signaux de contrôle au niveau de la SRAM.\\
+
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{Image/decalage_data.png}
+\caption{Extrait ennoncé projet}
+\end{figure}
+
+D'après l'ennoncé du projet et la datasheet de la SRAM, il est nécessaire d'avoir un décalage d'un cycle d'horloge entre la donnée et les signaux de contrôle.\\
+
+\subsubsection{Code}
 
 
+\subsubsection{Simulation}
 
 
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{Image/sim_IOB.png}
+\caption{Simulation IO Buffer}
+\end{figure}
+
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{Image/sim_IOB_ZZZ.png}
+\caption{Haute impédance à la lecture de la donnée}
+\end{figure}
