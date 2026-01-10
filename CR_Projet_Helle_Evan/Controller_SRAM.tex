@@ -1,5 +1,168 @@
 \section{Crontrolleur SRAM}
 
+Maintenant que nous avons validé le bon fonctionnement de l'IO buffer connecté à la SRAM, nous allons implémenter le contrôleur de la SRAM. Celui-ci sera responsable de la gestion des opérations de lecture et d'écriture vers la mémoire SRAM en fonction des signaux d'entrée.\\
+Son fonctionnement sera basé sur une machine à états finis (FSM) qui gérera les différents états nécessaires pour effectuer les opérations de lecture et d'écriture.\\
+un IO buffer sera également présent pour interfacer les données entre le contrôleur et la SRAM.\\
+
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Image/ctrl_sram.png}
+\caption{Controlleur SRAM}
+\end{figure}
+
+Coté utilisateur, Les signaux ont été ajustés pour tensir sur un nombre d'octets complet:\\
+
+\begin{itemize}
+    \item \verb|User_address| : Adresse de 19 bits 
+    \item \verb|User_data_in| : Données d'entrée de 32 bits
+    \item \verb|User_data_out| : Données de sortie de 32 bits
+    \item \verb|Ctrl| : Signal d'écriture/lecture (1 bit)
+\end{itemize}
+
+Nous avons fait le choix de laisser l'adresse sur 19 bits pour pouvoir adresser toute la mémoire SRAM.\\
+D'un point de vue utilisateur, nous aurions pu choisir de mettre l'addresse sur 16 bits pour avoir un nombrecomplet d'octet.\\
+
 \subsection{Finished State Machine}
 
+D'après la page 11 de la datasheet de la SRAM :\\
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Image/FSM.png }
+\caption{FSM}
+\end{figure}
+
+Pour le moment, nous n'allons pas implémenter le mode Burst.\\
+Cela signifie que les signaux \verb|MODE (LBO#)| et \verb|ADV/LV#| seront à 0.\\
+
+\subsubsection{Implementation FSM}
+
+\begin{minted}[frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor = lightgray,
+fontsize=\footnotesize,
+linenos
+]{VHDL}
+process(Clk,reset)
+begin 
+if reset ='1' then 
+    state  <= INIT;
+
+elsif Clk'EVENT and Clk = '1' then 
+    case state is
+        When INIT => 
+            state  <= IDLE;
+            
+        when IDLE =>
+            if Ctrl ='1' AND Start ='1' then 
+                state <= READ;
+            elsif Ctrl ='0' AND Start ='1' then 
+                state <= WRITE;
+            else 
+                state <= IDLE;
+            end if;
+            
+        when READ =>
+            if Ctrl ='1' AND Start ='1' then 
+                state <= READ;
+            elsif Ctrl ='0' AND Start ='1' then 
+                state <= WRITE;
+            else 
+                state <= IDLE;
+            end if;
+            
+        when WRITE =>
+            if Ctrl ='1' AND Start ='1' then 
+                state <= READ;
+            elsif Ctrl ='0' AND Start ='1' then 
+                state <= WRITE;
+            else 
+                state <= IDLE;
+            end if;            
+    end case;
+end if; 
+end process;
+\end{minted}
+
+\subsection{Implementation du controlleur SRAM}
+
+D'après le sujet, plusieurs signaux seront à mettre à 0 :\\
+
+\begin{itemize}
+    \item ZZ sooze mode : basse consommation. 1 pour activer
+    \item nCKE : clock enable si mis à 0
+    \item nBWA
+    \item nBWB
+    \item nBWC
+    \item nBWD : Byte write enable. permet de selectionner quels octets sont écrits. mis à 0 pour écrire tous les octets.
+\end{itemize}
+
+Afin de creer un déclalge d'horloge entre la donnée utilisateur, l'adresse et la commande, nous allons utiliser des bascules D
+La manière la plus simple d'utiliser des bascules D est de assaigner une entrée à un signal interne du composant dans un processus sensible aux fronts de l'horloge.\\
+
+Ici, sur front monant, nous allons décaler la donnée utilisateur de deux cycles d'horloge et recopier l'adresse utilisateur sur l'adresse de la SRAM.\\
+Sur front descendant, nous allons ajouter les bits de parité à la donnée avant de l'envoyer à la SRAM et renvoyer la donnée lue de la SRAM vers la sortie utilisateur.\\
+
+\begin{minted}[frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor = lightgray,
+fontsize=\footnotesize,
+linenos
+]{VHDL}
+process(Clk)
+begin
+if Clk'EVENT and Clk = '1' then 
+--decalage de la donnée de deux fronts montant
+decalage_data_in_1 <= User_Data_in ;
+decalage_data_in_2 <= decalage_data_in_1;
+
+Addr <= User_Address; -- recopier l'adresse d'entrée du controller en entrée de la SRAM
+end if;
+end process; 
+
+process(Clk)
+begin
+if Clk'EVENT and Clk = '0' then -- sur front descendant
+Data_in_s <= "0000" & decalage_data_in_2; --Ajout des 4 bits de parités dans à la donnée
+User_Data_out <= Data_out_s(31 downto 0); --Renvoie des 32 bits sur la sortie 
+end if;
+end process; 
+\end{minted}
+
+
+
 \subsection{Test bench}
+
+Le test bench de notre composant SRAM complet se résume à tester plusieurs points:
+\begin{itemize}
+    \item Que les instructions de lecture/ecriture données par l'utilisateur son bien traitées par la FSM.
+    \item Les données à écrire/lire sont bien traitées par l'IO Buffer.
+    \item Les données sont correctements transmisent à la SRAM.
+\end{itemize}
+
+pour se faire, nous allons d'abord executer une sequence d'écriture/lecture à l'adresse 0.
+Ensuite, nous feront la même chose à l'adresse 7FFF\dots (soit la dernière adresse de la SRAM).
+Et enfin pour vérifier que la SRAM stock bien les données, nous vérifirons que la donnée à l'adresse 0 est toujours présente\\
+
+Ces tests nous permettront de nous assurer du bon fonctionnement de notre implémentation du controlleur SRAM.\\
+
+
+Le test bench est disponile sur GitHub sous le nom de fichier \verb|tb_sram_controller.vhd|.\\
+
+Voici sur la page suivante, la simulation du test bench:\\
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Image/tb_SRAM_simulation.png}
+\caption{Simulation Test Bench Controlleur SRAM}
+\end{figure}
+
+Des marqueurs ont été placés pour indiquer les lectures aux différentes addresses.\\
+On constate que les données lues sont bien celles qui ont été écrites précédemment.\\
+à la lecture, le bus DQ de la SRAM est mis en haute impédance, ce qui est visible sur la simulation.\\
+Les données et les adresses sont bien décalées d'un cycle d'horloge, comme prévu.\\
+
+Ainsi, nous avons validé le bon fonctionnement de notre controlleur SRAM.\\

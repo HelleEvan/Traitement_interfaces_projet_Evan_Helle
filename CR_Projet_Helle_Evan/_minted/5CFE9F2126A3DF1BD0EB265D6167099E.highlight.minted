@@ -1,0 +1,20 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{process}\PYG{p}{(}\PYG{n}{Clk}\PYG{p}{)}
+\PYG{k}{begin}
+\PYG{k}{if}\PYG{+w}{ }\PYG{n}{Clk}\PYG{n+na}{\PYGZsq{}EVENT}\PYG{+w}{ }\PYG{k}{and}\PYG{+w}{ }\PYG{n}{Clk}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{+w}{ }\PYG{k}{then}
+\PYG{c+c1}{\PYGZhy{}\PYGZhy{}decalage de la donnée de deux fronts montant}
+\PYG{n}{decalage\PYGZus{}data\PYGZus{}in\PYGZus{}1}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{User\PYGZus{}Data\PYGZus{}in}\PYG{+w}{ }\PYG{p}{;}
+\PYG{n}{decalage\PYGZus{}data\PYGZus{}in\PYGZus{}2}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{decalage\PYGZus{}data\PYGZus{}in\PYGZus{}1}\PYG{p}{;}
+
+\PYG{n}{Addr}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{User\PYGZus{}Address}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} recopier l\PYGZsq{}adresse d\PYGZsq{}entrée du controller en entrée de la SRAM}
+\PYG{k}{end}\PYG{+w}{ }\PYG{k}{if}\PYG{p}{;}
+\PYG{k}{end}\PYG{+w}{ }\PYG{k}{process}\PYG{p}{;}
+
+\PYG{k}{process}\PYG{p}{(}\PYG{n}{Clk}\PYG{p}{)}
+\PYG{k}{begin}
+\PYG{k}{if}\PYG{+w}{ }\PYG{n}{Clk}\PYG{n+na}{\PYGZsq{}EVENT}\PYG{+w}{ }\PYG{k}{and}\PYG{+w}{ }\PYG{n}{Clk}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{+w}{ }\PYG{k}{then}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} sur front descendant}
+\PYG{n}{Data\PYGZus{}in\PYGZus{}s}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}0000\PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{decalage\PYGZus{}data\PYGZus{}in\PYGZus{}2}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}Ajout des 4 bits de parités dans à la donnée}
+\PYG{n}{User\PYGZus{}Data\PYGZus{}out}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{Data\PYGZus{}out\PYGZus{}s}\PYG{p}{(}\PYG{l+m+mi}{31}\PYG{+w}{ }\PYG{k}{downto}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}Renvoie des 32 bits sur la sortie}
+\PYG{k}{end}\PYG{+w}{ }\PYG{k}{if}\PYG{p}{;}
+\PYG{k}{end}\PYG{+w}{ }\PYG{k}{process}\PYG{p}{;}
+\end{MintedVerbatim}

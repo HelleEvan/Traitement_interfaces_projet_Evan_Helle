@@ -4,4 +4,7 @@
 \contentsline {figure}{\numberline {1.2}{\ignorespaces Extrait ennoncé projet}}{6}{figure.caption.4}%
 \contentsline {figure}{\numberline {1.3}{\ignorespaces Simulation IO Buffer}}{8}{figure.caption.5}%
 \contentsline {figure}{\numberline {1.4}{\ignorespaces Haute impédance à la lecture de la donnée}}{8}{figure.caption.6}%
+\contentsline {figure}{\numberline {1.5}{\ignorespaces Controlleur SRAM}}{9}{figure.caption.7}%
+\contentsline {figure}{\numberline {1.6}{\ignorespaces FSM}}{10}{figure.caption.8}%
+\contentsline {figure}{\numberline {1.7}{\ignorespaces Simulation Test Bench Controlleur SRAM}}{13}{figure.caption.9}%
 \addvspace {10\p@ }

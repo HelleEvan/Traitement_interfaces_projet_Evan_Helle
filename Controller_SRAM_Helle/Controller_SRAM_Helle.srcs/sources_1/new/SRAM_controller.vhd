@@ -115,11 +115,6 @@ begin
     process(Clk,reset)
     begin 
         if reset ='1' then 
-            --User_Data_out <=(others  =>'0');
-            --Data_in_s <=(others  =>'0');
-            --Data_out_s <=(others  =>'0');
-            --Dq <=(others  =>'0');
-            --Addr <=(others  =>'0');
             state  <= INIT;
         
         elsif Clk'EVENT and Clk = '1' then 
