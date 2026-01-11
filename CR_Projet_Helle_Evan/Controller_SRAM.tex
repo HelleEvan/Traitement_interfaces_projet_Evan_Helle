@@ -96,8 +96,10 @@ D'après le sujet, plusieurs signaux seront à mettre à 0 :\\
     \item nBWA
     \item nBWB
     \item nBWC
-    \item nBWD : Byte write enable. permet de selectionner quels octets sont écrits. mis à 0 pour écrire tous les octets.
+    \item nBWD : Byte write enable. permet de selectionner quels octets sont écrits. Mis à 0 pour écrire tous les octets.
 \end{itemize}
+
+Ces signaux seront mis à 0 dans un état précédent l'état \verb|IDLE| qui est l'état \verb|INIT|.\\
 
 Afin de creer un déclalge d'horloge entre la donnée utilisateur, l'adresse et la commande, nous allons utiliser des bascules D
 La manière la plus simple d'utiliser des bascules D est de assaigner une entrée à un signal interne du composant dans un processus sensible aux fronts de l'horloge.\\
@@ -153,6 +155,7 @@ Ces tests nous permettront de nous assurer du bon fonctionnement de notre implé
 Le test bench est disponile sur GitHub sous le nom de fichier \verb|tb_sram_controller.vhd|.\\
 
 Voici sur la page suivante, la simulation du test bench:\\
+La configuration de la simultaion est disponible dans le répertoire GitHub sur le nom de \verb|tb_sram_controller_behav.wcfg|.\\
 % - Image - %
 \begin{figure}[H]
 \centering

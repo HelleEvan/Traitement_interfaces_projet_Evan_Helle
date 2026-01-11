@@ -1,0 +1,17 @@
+\section{Mode Burst}
+La SRAM est capable de fonctionner en mode Burst. Ce mode permet de lire ou d'écrire plusieurs mots consécutifs en une seule opération, ce qui améliore les performances lors de l'accès à des blocs de données.\\
+Nous allons implémenter ce mode dans notre contrôleur SRAM pour optimiser les opérations de lecture et d'écriture.\\
+
+\subsection{Implémentation du mode Burst}
+
+Premièrement, le signal \verb|ADV/LV#0| varira en fonction du mode de fonctionnement.\\
+Pour l'instant, il est à l'état de constante à 0.\\
+Nous allons donc assigner cette variable à 0 dans notre FSM à l'état \verb|IDLE|, \verb|READ| et \verb|WRITE|.\\  
+
+Après cette étape, un rapide lancement de la simulation du controlleur sram indique que ce changement n'a rien cassé.\\
+
+\subsubsection{FSM}
+
+Pour l'implémentation du mode Burst, nous allons ajouter deux nouveaux états à notre FSM existante : \verb|READ_BURST| et \verb|WRITE_BURST|.\\
+Ces états géreront les opérations de lecture et d'écriture en mode Burst.\\
+
