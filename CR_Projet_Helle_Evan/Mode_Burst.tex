@@ -170,11 +170,13 @@ Il faut séparer clairement :
 adresse de départ
 
 adresse courante du burst
+on incremente l'adresse en mode burst aussi bien sur
+when READ =>
+if Burst = '1' AND Start = '1' then
+burst_addr <= User_Address;
+Addr_s     <= User_Address; 
 
-                    when READ =>
-                        if Burst = '1' AND Start = '1' then
-                            burst_addr <= User_Address;
-                            Addr_s     <= User_Address; µµ
+à mettre quand on passe au mode burst pour récupere l'adresse sur laquelle on fait le burst
 
-                            à mettre quand on passe au mode burst pour récupere l'adresse sur laquelle on fait le burst
-                            
+
+il faut incrementer la donnée sur le write burstt pour voir si tout va bien 
