@@ -554,18 +554,4 @@ process
 
 	   wait;
 	END PROCESS;
-	
-	-- process d'incrementattion de donnée pour le WRITE BURST
---process(CLKO_SRAM)
---begin
---    if rising_edge(CLKO_SRAM) then
---        -- Si on est en mode écriture (user_Ctrl='0') et que le burst est actif
---        if (user_Burst = '1' and R_W_enable = '1' and user_Ctrl = '0') then
---            Data_in_s <= std_logic_vector(unsigned(Data_in_s) + 1);
---        else
---            -- Optionnel : garder la valeur ou mettre une valeur fixe hors burst
---            Data_in_s <= Data_in_s; 
---        end if;
---    end if;
---end process;
 end Behavioral;

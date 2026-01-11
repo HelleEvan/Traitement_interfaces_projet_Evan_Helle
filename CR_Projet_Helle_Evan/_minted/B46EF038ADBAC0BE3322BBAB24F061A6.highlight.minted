@@ -1,0 +1,35 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} MODE BURST TB \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{	   }\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKH}\PYG{o}{+}\PYG{n}{TCLKL}\PYG{p}{);}
+\PYG{+w}{	   }\PYG{n}{Data\PYGZus{}in\PYGZus{}s}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}00000000000000000000000000000001\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} 32 bits}
+\PYG{+w}{	}
+\PYG{+w}{       }\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{.}\PYG{l+m+mi}{25}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKH}\PYG{o}{+}\PYG{n}{TCLKL}\PYG{p}{);}
+\PYG{+w}{       }\PYG{n}{Addr\PYGZus{}in\PYGZus{}s}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}0000000000000000001\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} 19 bits}
+\PYG{+w}{       }\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{.}\PYG{l+m+mi}{25}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKH}\PYG{o}{+}\PYG{n}{TCLKL}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}write}
+\PYG{+w}{	   }\PYG{n}{user\PYGZus{}Burst}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{n}{user\PYGZus{}Ctrl}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{n}{R\PYGZus{}W\PYGZus{}enable}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}nRW\PYGZus{}s    \PYGZlt{}= \PYGZsq{}0\PYGZsq{};}
+\PYG{+w}{	}
+\PYG{+w}{       }\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{.}\PYG{l+m+mi}{25}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKH}\PYG{o}{+}\PYG{n}{TCLKL}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}write BURST}
+\PYG{+w}{	   }\PYG{n}{user\PYGZus{}Burst}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} Boucle d\PYGZsq{}incrémentation manuelle synchronisée sur l\PYGZsq{}horloge}
+\PYG{+w}{       }\PYG{k}{for}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{k}{to}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{+w}{ }\PYG{k}{loop}
+\PYG{+w}{           }\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{until}\PYG{+w}{ }\PYG{n}{rising\PYGZus{}edge}\PYG{p}{(}\PYG{n}{CLKO\PYGZus{}SRAM}\PYG{p}{);}
+\PYG{+w}{           }\PYG{n}{Data\PYGZus{}in\PYGZus{}s}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{k+kt}{std\PYGZus{}logic\PYGZus{}vector}\PYG{p}{(}\PYG{k+kt}{unsigned}\PYG{p}{(}\PYG{n}{Data\PYGZus{}in\PYGZus{}s}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{       }\PYG{k}{end}\PYG{+w}{ }\PYG{k}{loop}\PYG{p}{;}
+\PYG{+w}{	}
+\PYG{+w}{	   }\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{8}\PYG{p}{.}\PYG{l+m+mi}{75}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKH}\PYG{o}{+}\PYG{n}{TCLKL}\PYG{p}{);}\PYG{c+c1}{\PYGZhy{}\PYGZhy{}read}
+\PYG{+w}{	   }\PYG{n}{user\PYGZus{}Burst}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}wait for 1.25*(TCLKH+TCLKL);}
+\PYG{+w}{	   }\PYG{n}{Addr\PYGZus{}in\PYGZus{}s}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}0000000000000000001\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} 19 bits on va relire les données écrit avec le burst}
+\PYG{+w}{	   }\PYG{n}{user\PYGZus{}Ctrl}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{n}{R\PYGZus{}W\PYGZus{}enable}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}nRW\PYGZus{}s    \PYGZlt{}= \PYGZsq{}1\PYGZsq{};}
+\PYG{+w}{	}
+\PYG{+w}{	   }\PYG{k}{wait}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{.}\PYG{l+m+mi}{5}\PYG{o}{*}\PYG{p}{(}\PYG{n}{TCLKH}\PYG{o}{+}\PYG{n}{TCLKL}\PYG{p}{);}\PYG{c+c1}{\PYGZhy{}\PYGZhy{}read BURST}
+\PYG{+w}{	   }\PYG{n}{user\PYGZus{}Burst}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{n}{user\PYGZus{}Ctrl}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{n}{R\PYGZus{}W\PYGZus{}enable}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{	   }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}nRW\PYGZus{}s    \PYGZlt{}= \PYGZsq{}1\PYGZsq{};}
+\end{MintedVerbatim}

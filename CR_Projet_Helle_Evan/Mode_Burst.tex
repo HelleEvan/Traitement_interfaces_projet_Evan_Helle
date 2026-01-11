@@ -162,26 +162,89 @@ process(Clk,reset)
 
 \end{minted}
 
-plus de signal DQ_s on met DQ en inout 
+DQ est passé en bidirectionnel inout ce n'était pas le cas avant nous utilisionss un signal qui décalait la donnée pour la mettre en sortie ou en entrée.\\
 
-adresse qui s'incrémente toute seule en burst
-Il faut séparer clairement :
+Nous avons été contraint d'ajouter un signal intermédiaire T\_s\_reg qui gère la direction du bus de données bidirectionnel.\\
+Si la direction du bus change instantanément sans passer par un registre, nous risquons un conflit de bus : le FPGA et la SRAM essaient de parler en même temps sur le même fil pendant une fraction de seconde, ce qui crée des courts-circuits en simulation.\\
+T\_s\_reg permet de s'assurer que l'ordre de passer en haute impédance est parfaitement aligné avec le cycle d'horloge où la donnée doit sortir.\\
 
-adresse de départ
+Nopus avons également ajouté un registre pour l'adresse de burst : burst\_addr.\\
+Il faut séparer clairement adresse de départ et adresse courante du burst.\\
 
-adresse courante du burst
-on incremente l'adresse en mode burst aussi bien sur
-when READ =>
-if Burst = '1' AND Start = '1' then
-burst_addr <= User_Address;
-Addr_s     <= User_Address; 
+Il faut incrementer la donnée sur le write burst pour voir si tout va bien.\\
+Une simple boucle dans le test bench permet de faire cela.\\
 
-à mettre quand on passe au mode burst pour récupere l'adresse sur laquelle on fait le burst
+Il y'a eu une confusion avec le signal Ld\_n.\\
+Nous avons forcé l'incrementation de l'adresse par le controlleur durant le mode burst.\\
+Or, la SRAM est capable de gérer l'incrementation automatique de l'adresse en mode burst si Ld\_n est à 1.\\
+Si nous voulons faire un programme plus preformant, il faudrait reprendre le code et changer l'incrementation forcée par celle de la sram.\\
+Par souci de temps, nous laisserons cela ainsi pour le moment. Cela est amplement suffisant pour valider le fonctionnement du controlleur.\\
 
+Voici la partie du test bench pour le mode burst:\\
+Nous avons fait le choix d'ajouter cette partie au test bench existant plutot que de créer un nouveau test bench dédié au mode burst.\\
 
-il faut incrementer la donnée sur le write burstt pour voir si tout va bien 
+\begin{minted}[frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor = lightgray,
+fontsize=\footnotesize,
+linenos
+]{VHDL}
+ -- MODE BURST TB ------------------------------------------------------
+	   wait for 1*(TCLKH+TCLKL);
+	   Data_in_s <= "00000000000000000000000000000001"; -- 32 bits
+	   
+       wait for 1.25*(TCLKH+TCLKL);
+       Addr_in_s <= "0000000000000000001"; -- 19 bits
+       wait for 1.25*(TCLKH+TCLKL); --write
+	   user_Burst <='0';   
+	   user_Ctrl <= '0';
+	   R_W_enable <='1';
+	   --nRW_s    <= '0';
+	   
+       wait for 1.25*(TCLKH+TCLKL); --write BURST
+	   user_Burst <='1';
+	   -- Boucle d'incrémentation manuelle synchronisée sur l'horloge
+       for i in 0 to 4 loop
+           wait until rising_edge(CLKO_SRAM);
+           Data_in_s <= std_logic_vector(unsigned(Data_in_s) + 1);
+       end loop;
+	   
+	   wait for 8.75*(TCLKH+TCLKL);--read
+	   user_Burst <='0';
+	   --wait for 1.25*(TCLKH+TCLKL);
+	   Addr_in_s <= "0000000000000000001"; -- 19 bits on va relire les données écrit avec le burst
+	   user_Ctrl <= '1';
+	   R_W_enable <='1';
+	   --nRW_s    <= '1';
+	   
+	   wait for 2.5*(TCLKH+TCLKL);--read BURST
+	   user_Burst <='1';   
+	   user_Ctrl <= '1';
+	   R_W_enable <='1';
+	   --nRW_s    <= '1';
+\end{minted}
 
-confusion avec le signal Ld\_n
-j'ai forcé l'incrementation de l'adresse par le controlleur
-si on veut faire propre, on reprend le code et on change le'incrementation forcée par celle de la sram 
-pour l'instant on garde comme ça pour valider le mode burst
+L'écriture en mode burst fonctionne parfaitement, de même pour la lecture.\\
+nous incrémentation la donnée à chaque cycle d'horloge pendant le burst pour vérifier que tout fonctionne correctement.\\
+
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Image/Write_burst.png}
+\caption{Simulation write mode burst}
+\end{figure}
+
+Ensuite nous lisons les données en mode burst en reprenant les mêmes address que pour l'écriture.\\
+
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Image/read_burst.png}
+\caption{Simulation read mode burst}
+\end{figure}
+
+à partir de là, nous pouvons considérer que le mode burst est fonctionnel.\\
+Il reste cependant quelques améliorations à apporter pour rendre le contrôleur plus robuste et efficace.\\
+Par exemple, l'utilisation de l'incrementation automatique de l'adresse par la SRAM elle-même en mode burst, plutôt que de gérer cela manuellement dans le contrôleur.\\
+Cela nécessiterait une révision de la gestion du signal Ld\_n et une adaptation de la logique de la FSM pour s'aligner avec le comportement de la SRAM en mode burst.\\
