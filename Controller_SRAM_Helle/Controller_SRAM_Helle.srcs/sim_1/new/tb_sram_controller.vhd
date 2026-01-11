@@ -532,6 +532,11 @@ process
 	   
        wait for 1.25*(TCLKH+TCLKL); --write BURST
 	   user_Burst <='1';
+	   -- Boucle d'incrémentation manuelle synchronisée sur l'horloge
+       for i in 0 to 4 loop
+           wait until rising_edge(CLKO_SRAM);
+           Data_in_s <= std_logic_vector(unsigned(Data_in_s) + 1);
+       end loop;
 	   
 	   wait for 8.75*(TCLKH+TCLKL);--read
 	   user_Burst <='0';
@@ -551,12 +556,16 @@ process
 	END PROCESS;
 	
 	-- process d'incrementattion de donnée pour le WRITE BURST
---    process(CLKO_SRAM)
---    begin
---        if rising_edge(CLKO_SRAM) then
---            if user_Burst = '1' and R_W_enable = '1' and user_Ctrl = '0' then
---                Data_in_s <= std_logic_vector(unsigned(Data_in_s) + 1);
---            end if;
+--process(CLKO_SRAM)
+--begin
+--    if rising_edge(CLKO_SRAM) then
+--        -- Si on est en mode écriture (user_Ctrl='0') et que le burst est actif
+--        if (user_Burst = '1' and R_W_enable = '1' and user_Ctrl = '0') then
+--            Data_in_s <= std_logic_vector(unsigned(Data_in_s) + 1);
+--        else
+--            -- Optionnel : garder la valeur ou mettre une valeur fixe hors burst
+--            Data_in_s <= Data_in_s; 
 --        end if;
---    end process;
+--    end if;
+--end process;
 end Behavioral;

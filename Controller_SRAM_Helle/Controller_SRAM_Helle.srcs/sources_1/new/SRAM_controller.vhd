@@ -252,7 +252,7 @@ begin
                 CE_n   <= '0';
                 OE_n   <= '0';
                 RW_n   <= '1';
-                Ld_n   <= '1'; -- CONTINUE
+                Ld_n   <= '0'; -- CONTINUE on charge l'adresse nous même
                 --T_s    <= '1';
                 T_s_reg <= '1';
                 
@@ -260,7 +260,7 @@ begin
                 CE_n   <= '0';
                 OE_n   <= '1';
                 RW_n   <= '0';
-                Ld_n   <= '1'; -- CONTINUE
+                Ld_n   <= '0'; -- CONTINUE on charge l'adresse nous même
                 --T_s    <= '0';
                 T_s_reg <= '0';
                 
