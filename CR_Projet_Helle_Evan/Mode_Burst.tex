@@ -15,3 +15,166 @@ Après cette étape, un rapide lancement de la simulation du controlleur sram in
 Pour l'implémentation du mode Burst, nous allons ajouter deux nouveaux états à notre FSM existante : \verb|READ_BURST| et \verb|WRITE_BURST|.\\
 Ces états géreront les opérations de lecture et d'écriture en mode Burst.\\
 
+De plus il faut désormais gérer des signaux que nous avions laissé de côté précédemment :\\
+
+
+\begin{itemize}
+    \item Ld\_n, permet d'autoriser ou de bloquer le changement d'adresse lors d'une opération en cours.
+    \item CE\_n, nécessaire à 0 si Ld\_n est à 0 pour que l'adresse soit prise en compte.
+    \item OE\_n, 
+\end{itemize}
+
+\newpage
+
+Voici un extrait de la FSM avec la gestion de ces signaux: \\
+
+\begin{minted}[frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor = lightgray,
+fontsize=\footnotesize,
+linenos
+]{VHDL}
+process(state)
+    begin 
+        case state is
+            When INIT => 
+                ...
+            when IDLE =>
+                Rw_n <= '1'; --protection materiel
+                CE_n   <= '1';
+                OE_n   <= '1';
+                Ld_n   <= '1';
+                T_s    <= '0';
+                
+            when READ =>
+                Rw_n <= '1'; -- on assignera cette valeur au trigg de la SRAM par la suite
+                T_s  <='1';
+                CE_n   <= '0';
+                OE_n   <= '0';
+                Ld_n   <= '0'; -- BEGIN
+                --Addr   <= User_Address;
+
+            when WRITE =>
+                Rw_n <= '0';
+                T_s  <='0';
+                CE_n   <= '0';
+                OE_n   <= '1';
+                Ld_n   <= '0'; -- BEGIN
+                --Addr   <= User_Address;
+
+            when READ_BURST =>
+                ...
+            when WRITE_BURST =>
+                ...
+        end case;
+    end process;  
+\end{minted}
+
+En ajoutant la gestion de ces signaux, Il faut s'assurer que  le mode de fonctionnement hors Burst reste intact.\\
+Nous allons donc relancer une simulation pour vérifier que tout fonctionne correctement.\\
+Le test bench à d'ailleur été amélioré pour afficher la dernière lecture de données sur l'adresse 0.\\
+
+% - Image - %
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Image/simu_burst_1.png }
+\caption{Simulation après ajout des signaux CE\_n, OE\_n et Ld\_n}
+\end{figure}
+
+La logique de changement d'état de la FSM doit également être mise à jour pour inclure les nouveaux états de Burst.\\
+Voici un extrait de la logique de changement d'état mise à jour : \\
+
+\begin{minted}[frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor = lightgray,
+fontsize=\footnotesize,
+linenos
+]{VHDL}
+
+process(Clk,reset)
+    begin 
+        if reset ='1' then 
+            state  <= INIT;
+        
+        elsif Clk'EVENT and Clk = '1' then 
+            case state is
+                When INIT => 
+                    state  <= IDLE;
+                    
+                when IDLE =>
+                    if Ctrl ='1' AND Start ='1' AND Burst ='0' then 
+                        state <= READ;
+                    elsif Ctrl ='0' AND Start ='1' AND Burst ='0' then 
+                        state <= WRITE;
+                    else 
+                        state <= IDLE;
+                    end if;
+                    
+                    when READ =>
+                        if Burst = '1' AND Start = '1' then
+                            state <= READ_BURST;
+                        elsif Ctrl = '1' AND Start = '1' then
+                            state <= READ;
+                        elsif Ctrl = '0' AND Start = '1' then
+                            state <= WRITE;
+                        else
+                            state <= IDLE;
+                        end if;
+                    
+                    when WRITE =>
+                        if Burst = '1' AND Start = '1' then
+                            state <= WRITE_BURST;
+                        elsif Ctrl = '1' AND Start = '1' then
+                            state <= READ;
+                        elsif Ctrl = '0' AND Start = '1' then
+                            state <= WRITE;
+                        else
+                            state <= IDLE;
+                        end if;
+                    
+                when READ_BURST =>
+                    if Ctrl ='1' AND Start='1' AND Burst ='0' then 
+                        state <= READ;
+                    elsif Ctrl ='0' AND Start='1' AND Burst ='0' then 
+                        state <= WRITE;
+                    elsif Burst ='1' AND Start='1' then 
+                        state <= READ_BURST;
+                    else 
+                        state <= IDLE;
+                    end if;
+                    
+                when WRITE_BURST =>
+                    if Ctrl ='1' AND Start='1' AND Burst ='0' then 
+                        state <= READ;
+                    elsif Ctrl ='0' AND Start='1' AND Burst ='0' then 
+                        state <= WRITE;
+                    elsif Burst ='1' AND Start='1' then 
+                        state <= WRITE_BURST;
+                    else 
+                        state <= IDLE;
+                    end if;
+                    
+            end case;
+        end if; 
+    end process;
+
+\end{minted}
+
+plus de signal DQ_s on met DQ en inout 
+
+adresse qui s'incrémente toute seule en burst
+Il faut séparer clairement :
+
+adresse de départ
+
+adresse courante du burst
+
+                    when READ =>
+                        if Burst = '1' AND Start = '1' then
+                            burst_addr <= User_Address;
+                            Addr_s     <= User_Address; µµ
+
+                            à mettre quand on passe au mode burst pour récupere l'adresse sur laquelle on fait le burst
+                            

@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -37,14 +37,15 @@ use unisim.VComponents.all;
 
 entity SRAM_controller is
     Port ( Clk : in STD_LOGIC;
-           Ctrl : in STD_LOGIC; -- read and write permet en un seul port. permet d'éviter un read et write en même temps.
+           Ctrl : in STD_LOGIC; -- read and write en un seul port. permet d'éviter un read et write en même temps.
+           Burst : in STD_LOGIC; -- activation du burst 
            Start :in STD_LOGIC; -- mettre à 1 pour sortir du Idle
            User_Address : in STD_LOGIC_VECTOR (18 downto 0);
            User_Data_in : in STD_LOGIC_VECTOR (31 downto 0);
            User_Data_out : out STD_LOGIC_VECTOR (31 downto 0);
            reset : in STD_LOGIC;
            --ctrl SRAM 
-            Dq    : out    std_logic_vector (35 downto 0);             -- Data I/O
+            Dq    : inout     std_logic_vector (35 downto 0);             -- Data I/O
             Addr  : out    std_logic_vector (18 downto 0);             -- Address
             Lbo_n : out    std_logic;                                  -- Burst Mode
             Cke_n : out    std_logic;                                  -- Cke#
@@ -77,17 +78,20 @@ architecture Behavioral of SRAM_controller is
     signal Data_in_s : STD_LOGIC_VECTOR (35 downto 0);
     signal Dq_s : STD_LOGIC_VECTOR (35 downto 0);
     signal T_s : STD_LOGIC;
-    type StateType is(INIT, IDLE, READ, WRITE);
+    type StateType is(INIT, IDLE, READ, WRITE, READ_BURST, WRITE_BURST);
     signal state : StateType;
     signal decalage_data_in_1 : STD_LOGIC_VECTOR (31 downto 0);
     signal decalage_data_in_2 : STD_LOGIC_VECTOR (31 downto 0);
+    signal Addr_s : std_logic_vector (18 downto 0);
+    signal burst_addr : std_logic_vector(18 downto 0);
+    signal T_s_reg : std_logic := '1'; -- Par défaut en lecture (Haute impédance) pour sécurité
   
 -- Instanciation du controleur
 begin
     IOb: for I in 0 to 35 generate
     Iobx: IOBUF_F_16  port map(
         O => Data_out_s(I),
-        IO => Dq_s(I),  
+        IO => Dq(I),  
         I => Data_in_s(I), 
 		T => T_s
         );
@@ -100,7 +104,7 @@ begin
             decalage_data_in_1 <= User_Data_in ;
             decalage_data_in_2 <= decalage_data_in_1;
             
-            Addr <= User_Address; -- recopier l'adresse d'entrée du controller en entrée de la SRAM
+            T_s <= T_s_reg;
         end if;
     end process; 
     
@@ -116,38 +120,86 @@ begin
     begin 
         if reset ='1' then 
             state  <= INIT;
-        
+            Addr_s <= (others => '0');
+            burst_addr <= (others => '0');
+            
         elsif Clk'EVENT and Clk = '1' then 
+            Addr_s <= Addr_s;  -- singal d'adresse recopié sur la sortie
             case state is
                 When INIT => 
                     state  <= IDLE;
                     
                 when IDLE =>
-                    if Ctrl ='1' AND Start ='1' then 
+                    Addr_s <= User_Address;
+                    burst_addr <= User_Address;
+                    if Ctrl ='1' AND Start ='1' AND Burst ='0' then 
                         state <= READ;
-                    elsif Ctrl ='0' AND Start ='1' then 
+                    elsif Ctrl ='0' AND Start ='1' AND Burst ='0' then 
                         state <= WRITE;
                     else 
                         state <= IDLE;
                     end if;
                     
-                when READ =>
-                    if Ctrl ='1' AND Start ='1' then 
+                    when READ =>
+                        if Burst = '1' AND Start = '1' then
+                            burst_addr <= User_Address;
+                            Addr_s     <= User_Address;         
+                            state <= READ_BURST;
+                        elsif Ctrl = '1' AND Start = '1' then
+                            state <= READ;
+                        elsif Ctrl = '0' AND Start = '1' then
+                            state <= WRITE;
+                        else
+                            state <= IDLE;
+                        end if;
+                    
+                    when WRITE =>
+                        if Burst = '1' AND Start = '1' then
+                            burst_addr <= User_Address;
+                            Addr_s     <= User_Address;
+                            state <= WRITE_BURST;
+                        elsif Ctrl = '1' AND Start = '1' then
+                            state <= READ;
+                        elsif Ctrl = '0' AND Start = '1' then
+                            state <= WRITE;
+                        else
+                            state <= IDLE;
+                        end if;
+                    
+                when READ_BURST =>
+                    if Ctrl ='1' AND Start='1' AND Burst ='0' then 
+                        burst_addr <= User_Address;
+                        Addr_s <= User_Address;
                         state <= READ;
-                    elsif Ctrl ='0' AND Start ='1' then 
+                    elsif Ctrl ='0' AND Start='1' AND Burst ='0' then 
+                        burst_addr <= User_Address;
+                        Addr_s <= User_Address;
                         state <= WRITE;
+                    elsif Burst ='1' AND Start='1' then 
+                        burst_addr <= std_logic_vector(unsigned(burst_addr) + 1);
+                        Addr_s     <= std_logic_vector(unsigned(burst_addr) + 1); --compteur pour l'addresse; 
+                        state <= READ_BURST;
                     else 
                         state <= IDLE;
                     end if;
                     
-                when WRITE =>
-                    if Ctrl ='1' AND Start ='1' then 
+                when WRITE_BURST =>
+                    if Ctrl ='1' AND Start='1' AND Burst ='0' then 
+                        burst_addr <= User_Address;
+                        Addr_s <= User_Address;
                         state <= READ;
-                    elsif Ctrl ='0' AND Start ='1' then 
+                    elsif Ctrl ='0' AND Start='1' AND Burst ='0' then 
+                        burst_addr <= User_Address;
+                        Addr_s <= User_Address;
                         state <= WRITE;
+                    elsif Burst ='1' AND Start='1' then 
+                        burst_addr <= std_logic_vector(unsigned(burst_addr) + 1);
+                        Addr_s     <= std_logic_vector(unsigned(burst_addr) + 1); --compteur pour l'addresse
+                        state <= WRITE_BURST;
                     else 
                         state <= IDLE;
-                    end if;            
+                    end if;
+                    
             end case;
         end if; 
     end process;
@@ -157,7 +209,7 @@ begin
         case state is
             When INIT => 
                 --sorties crtl sram constantes :
-                Lbo_n  <='0';                                 -- Burst Mode non instancier pour l'instant
+                Lbo_n  <='0';                                 -- Burst Mode 
                 Ld_n   <='0';                                 -- Adv/Ld# =0 sinon burst actif
                 Cke_n  <='0';                                 -- Clock enable
                 Bwa_n  <='0';                                 -- Bwa#
@@ -169,20 +221,51 @@ begin
                 Ce_n  <= '0';                                 -- CE#
                 Ce2_n <= '0';                                 -- CE2#
                 Ce2   <= '1';                                 -- Addr 
-                Rw_n <='0';
-                T_s <='0';
+                --T_s <='0';
+                --T_s <= T_s_reg;
                 Rw_n <= '1'; --protection materiel
             when IDLE =>
                 Rw_n <= '1'; --protection materiel
+                CE_n   <= '1';
+                OE_n   <= '1';
+                Ld_n   <= '1';
+                --T_s    <= '0';
+                T_s_reg <= '1';
+                
             when READ =>
                 Rw_n <= '1'; -- on assignera cette valeur au trigg de la SRAM par la suite
-                T_s  <='1';
+                --T_s  <='1';
+                CE_n   <= '0';
+                OE_n   <= '0';
+                Ld_n   <= '0'; -- BEGIN
+                T_s_reg <= '1';
 
             when WRITE =>
                 Rw_n <= '0';
-                T_s  <='0';
+                --T_s  <='0';
+                CE_n   <= '0';
+                OE_n   <= '1';
+                Ld_n   <= '0'; -- BEGIN
+                T_s_reg <= '0';
+
+            when READ_BURST =>
+                CE_n   <= '0';
+                OE_n   <= '0';
+                RW_n   <= '1';
+                Ld_n   <= '1'; -- CONTINUE
+                --T_s    <= '1';
+                T_s_reg <= '1';
+                
+            when WRITE_BURST =>
+                CE_n   <= '0';
+                OE_n   <= '1';
+                RW_n   <= '0';
+                Ld_n   <= '1'; -- CONTINUE
+                --T_s    <= '0';
+                T_s_reg <= '0';
                 
         end case;
-    end process;  
-    Dq <= Dq_s;
+    end process;
+    --Dq <= Dq_s;
+    Addr <= Addr_s; 
 end Behavioral;

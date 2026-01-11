@@ -1,0 +1,36 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{process}\PYG{p}{(}\PYG{n}{state}\PYG{p}{)}
+\PYG{+w}{    }\PYG{k}{begin}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n}{state}\PYG{+w}{ }\PYG{k}{is}
+\PYG{+w}{            }\PYG{k}{When}\PYG{+w}{ }\PYG{n}{INIT}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}
+\PYG{+w}{                }\PYG{p}{...}
+\PYG{+w}{            }\PYG{k}{when}\PYG{+w}{ }\PYG{n}{IDLE}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}
+\PYG{+w}{                }\PYG{n}{Rw\PYGZus{}n}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}protection materiel}
+\PYG{+w}{                }\PYG{n}{CE\PYGZus{}n}\PYG{+w}{   }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{OE\PYGZus{}n}\PYG{+w}{   }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{Ld\PYGZus{}n}\PYG{+w}{   }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{T\PYGZus{}s}\PYG{+w}{    }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{k}{when}\PYG{+w}{ }\PYG{n}{READ}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}
+\PYG{+w}{                }\PYG{n}{Rw\PYGZus{}n}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} on assignera cette valeur au trigg de la SRAM par la suite}
+\PYG{+w}{                }\PYG{n}{T\PYGZus{}s}\PYG{+w}{  }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{CE\PYGZus{}n}\PYG{+w}{   }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{OE\PYGZus{}n}\PYG{+w}{   }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{Ld\PYGZus{}n}\PYG{+w}{   }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} BEGIN}
+\PYG{+w}{                }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}Addr   \PYGZlt{}= User\PYGZus{}Address;}
+
+\PYG{+w}{            }\PYG{k}{when}\PYG{+w}{ }\PYG{n}{WRITE}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}
+\PYG{+w}{                }\PYG{n}{Rw\PYGZus{}n}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{T\PYGZus{}s}\PYG{+w}{  }\PYG{o}{\PYGZlt{}=}\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{CE\PYGZus{}n}\PYG{+w}{   }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{OE\PYGZus{}n}\PYG{+w}{   }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{Ld\PYGZus{}n}\PYG{+w}{   }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} BEGIN}
+\PYG{+w}{                }\PYG{c+c1}{\PYGZhy{}\PYGZhy{}Addr   \PYGZlt{}= User\PYGZus{}Address;}
+
+\PYG{+w}{            }\PYG{k}{when}\PYG{+w}{ }\PYG{n}{READ\PYGZus{}BURST}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}
+\PYG{+w}{                }\PYG{p}{...}
+\PYG{+w}{            }\PYG{k}{when}\PYG{+w}{ }\PYG{n}{WRITE\PYGZus{}BURST}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}
+\PYG{+w}{                }\PYG{p}{...}
+\PYG{+w}{        }\PYG{k}{end}\PYG{+w}{ }\PYG{k}{case}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{end}\PYG{+w}{ }\PYG{k}{process}\PYG{p}{;}
+\end{MintedVerbatim}

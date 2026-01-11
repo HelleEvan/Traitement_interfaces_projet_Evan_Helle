@@ -10,15 +10,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="191.930 ns"></ZoomStartTime>
-      <ZoomEndTime time="536.531 ns"></ZoomEndTime>
-      <Cursor1Time time="495.000 ns"></Cursor1Time>
+      <ZoomStartTime time="515.860 ns"></ZoomStartTime>
+      <ZoomEndTime time="869.261 ns"></ZoomEndTime>
+      <Cursor1Time time="650.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="212"></NameColumnWidth>
-      <ValueColumnWidth column_width="94"></ValueColumnWidth>
+      <NameColumnWidth column_width="172"></NameColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="25" />
+   <WVObjectSize size="27" />
    <wave_markers>
       <marker time="268930" label="" />
       <marker time="450930" label="" />
@@ -38,6 +38,10 @@
    <wvobject fp_name="/tb_sram_controller/Addr_in_s" type="array">
       <obj_property name="ElementShortName">Addr_in_s[18:0]</obj_property>
       <obj_property name="ObjectShortName">Addr_in_s[18:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/SRAM_Ctrl/Addr_s" type="array">
+      <obj_property name="ElementShortName">Addr_s[18:0]</obj_property>
+      <obj_property name="ObjectShortName">Addr_s[18:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_sram_controller/Addr_out_s" type="array">
       <obj_property name="ElementShortName">Addr_out_s[18:0]</obj_property>
@@ -59,6 +63,14 @@
       <obj_property name="ElementShortName">DQ_s[35:0]</obj_property>
       <obj_property name="ObjectShortName">DQ_s[35:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/tb_sram_controller/SRAM_Ctrl/state" type="other">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sram_controller/SRAM_Ctrl/Burst" type="logic">
+      <obj_property name="ElementShortName">Burst</obj_property>
+      <obj_property name="ObjectShortName">Burst</obj_property>
+   </wvobject>
    <wvobject fp_name="/tb_sram_controller/reset_s" type="logic">
       <obj_property name="ElementShortName">reset_s</obj_property>
       <obj_property name="ObjectShortName">reset_s</obj_property>
@@ -70,10 +82,6 @@
    <wvobject fp_name="/tb_sram_controller/SRAM_Ctrl/T_s" type="logic">
       <obj_property name="ElementShortName">T_s</obj_property>
       <obj_property name="ObjectShortName">T_s</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_sram_controller/SRAM_Ctrl/state" type="other">
-      <obj_property name="ElementShortName">state</obj_property>
-      <obj_property name="ObjectShortName">state</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_sram_controller/nOE_s" type="logic">
       <obj_property name="ElementShortName">nOE_s</obj_property>
