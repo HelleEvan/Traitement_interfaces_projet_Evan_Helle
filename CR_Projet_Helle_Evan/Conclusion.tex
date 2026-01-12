@@ -1,1 +1,10 @@
 \section{Conclusion}
+
+Ce projet avait pour objectif de concevoir et implémenter en VHDL un contrôleur de mémoire SRAM en respectant les contraintes temporelles et fonctionnelles du composant mt55l512y36f.\\
+Dans un premier temps, l'étude et la validation de l'IO Buffer ont permis de comprendre le fonctionnement du bus bidirectionnel et de garantir une gestion correcte des phases de lecture et d'écriture, notamment grâce à la mise en haute impédance du bus lors des lectures.\\
+
+La conception du contrôleur SRAM s'est appuyée sur une machine à états finis assurant une gestion fiable des accès mémoire. Les décalages d'horloge entre données, adresses et signaux de contrôle ont été correctement pris en compte à l'aide de registres synchronisés, ce qui a permis de respecter les exigences de la SRAM. Les simulations réalisées à l'aide des test bench ont validé le bon fonctionnement des opérations de lecture et d'écriture sur l'ensemble de l'espace mémoire.\\
+
+L'implémentation du mode Burst a permis d'améliorer les performances du contrôleur en autorisant des accès consécutifs à la mémoire. Bien que l'incrémentation de l'adresse ait été gérée manuellement par le contrôleur pour des raisons de temps, les simulations montrent que le mode Burst fonctionne correctement en lecture comme en écriture.\\
+
+Ce projet a ainsi permis de mettre en pratique la conception d'un système matériel complet en VHDL, depuis l'analyse du composant jusqu'à la validation par simulation. Des améliorations restent possibles, notamment en exploitant pleinement les mécanismes internes de la SRAM pour optimiser le mode Burst, mais le contrôleur développé répond aux objectifs fixés et constitue une base solide pour des évolutions futures.\\

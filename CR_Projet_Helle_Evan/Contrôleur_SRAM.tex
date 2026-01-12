@@ -1,4 +1,4 @@
-\section{Crontrolleur SRAM}
+\section{Contrôleur SRAM}
 
 Maintenant que nous avons validé le bon fonctionnement de l'IO buffer connecté à la SRAM, nous allons implémenter le contrôleur de la SRAM. Celui-ci sera responsable de la gestion des opérations de lecture et d'écriture vers la mémoire SRAM en fonction des signaux d'entrée.\\
 Son fonctionnement sera basé sur une machine à états finis (FSM) qui gérera les différents états nécessaires pour effectuer les opérations de lecture et d'écriture.\\
@@ -8,7 +8,7 @@ un IO buffer sera également présent pour interfacer les données entre le cont
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{Image/ctrl_sram.png}
-\caption{Controlleur SRAM}
+\caption{Contrôleur SRAM}
 \end{figure}
 
 Coté utilisateur, Les signaux ont été ajustés pour tensir sur un nombre d'octets complet:\\
@@ -86,7 +86,7 @@ end if;
 end process;
 \end{minted}
 
-\subsection{Implementation du controlleur SRAM}
+\subsection{Implementation du Contrôleur SRAM}
 
 D'après le sujet, plusieurs signaux seront à mettre à 0 :\\
 
@@ -149,23 +149,23 @@ pour se faire, nous allons d'abord executer une sequence d'écriture/lecture à 
 Ensuite, nous feront la même chose à l'adresse 7FFF\dots (soit la dernière adresse de la SRAM).
 Et enfin pour vérifier que la SRAM stock bien les données, nous vérifirons que la donnée à l'adresse 0 est toujours présente\\
 
-Ces tests nous permettront de nous assurer du bon fonctionnement de notre implémentation du controlleur SRAM.\\
+Ces tests nous permettront de nous assurer du bon fonctionnement de notre implémentation du Contrôleur SRAM.\\
 
 
 Le test bench est disponile sur GitHub sous le nom de fichier \verb|tb_sram_controller.vhd|.\\
 
 Voici sur la page suivante, la simulation du test bench:\\
-La configuration de la simultaion est disponible dans le répertoire GitHub sur le nom de \verb|tb_sram_controller_behav.wcfg|.\\
+La configuration de la simulation est disponible dans le répertoire GitHub sur le nom de \verb|tb_sram_controller_behav.wcfg|.\\
 % - Image - %
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.4\textwidth]{Image/tb_SRAM_simulation.png}
-\caption{Simulation Test Bench Controlleur SRAM}
+\caption{Simulation Test Bench Contrôleur SRAM}
 \end{figure}
 
-Des marqueurs ont été placés pour indiquer les lectures aux différentes addresses.\\
+Des marqueurs ont été placés pour indiquer les lectures aux différentes adresses.\\
 On constate que les données lues sont bien celles qui ont été écrites précédemment.\\
 à la lecture, le bus DQ de la SRAM est mis en haute impédance, ce qui est visible sur la simulation.\\
 Les données et les adresses sont bien décalées d'un cycle d'horloge, comme prévu.\\
 
-Ainsi, nous avons validé le bon fonctionnement de notre controlleur SRAM.\\
+Ainsi, nous avons validé le bon fonctionnement de notre Contrôleur SRAM.\\

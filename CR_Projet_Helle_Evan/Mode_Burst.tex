@@ -8,7 +8,7 @@ Premièrement, le signal \verb|ADV/LV#0| varira en fonction du mode de fonctionn
 Pour l'instant, il est à l'état de constante à 0.\\
 Nous allons donc assigner cette variable à 0 dans notre FSM à l'état \verb|IDLE|, \verb|READ| et \verb|WRITE|.\\  
 
-Après cette étape, un rapide lancement de la simulation du controlleur sram indique que ce changement n'a rien cassé.\\
+Après cette étape, un rapide lancement de la simulation du Contrôleur SRAM indique que ce changement n'a rien cassé.\\
 
 \subsubsection{FSM}
 
@@ -175,10 +175,10 @@ Il faut incrementer la donnée sur le write burst pour voir si tout va bien.\\
 Une simple boucle dans le test bench permet de faire cela.\\
 
 Il y'a eu une confusion avec le signal Ld\_n.\\
-Nous avons forcé l'incrementation de l'adresse par le controlleur durant le mode burst.\\
+Nous avons forcé l'incrementation de l'adresse par le Contrôleur durant le mode burst.\\
 Or, la SRAM est capable de gérer l'incrementation automatique de l'adresse en mode burst si Ld\_n est à 1.\\
 Si nous voulons faire un programme plus preformant, il faudrait reprendre le code et changer l'incrementation forcée par celle de la sram.\\
-Par souci de temps, nous laisserons cela ainsi pour le moment. Cela est amplement suffisant pour valider le fonctionnement du controlleur.\\
+Par souci de temps, nous laisserons cela ainsi pour le moment. Cela est amplement suffisant pour valider le fonctionnement du Contrôleur.\\
 
 Voici la partie du test bench pour le mode burst:\\
 Nous avons fait le choix d'ajouter cette partie au test bench existant plutot que de créer un nouveau test bench dédié au mode burst.\\
@@ -243,6 +243,8 @@ Ensuite nous lisons les données en mode burst en reprenant les mêmes address q
 \includegraphics[width=0.5\textwidth]{Image/read_burst.png}
 \caption{Simulation read mode burst}
 \end{figure}
+
+Le fait qu'on ait utilisé un compteur forcé au lieu du Ld\_n permet de ecrire/lire plus de 4 données à la suite car on est limité avec le compteur de la sram.\\
 
 à partir de là, nous pouvons considérer que le mode burst est fonctionnel.\\
 Il reste cependant quelques améliorations à apporter pour rendre le contrôleur plus robuste et efficace.\\

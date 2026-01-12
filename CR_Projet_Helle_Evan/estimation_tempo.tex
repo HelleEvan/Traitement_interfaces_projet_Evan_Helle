@@ -1,0 +1,42 @@
+\section{Estimation de la durée d'exécution du contrôleur SRAM}
+
+L'estimation de la durée d'exécution du contrôleur SRAM a été réalisée à partir des chronogrammes issus des simulations ModelSim présentées dans ce compte rendu. Ces simulations permettent d'observer précisément l'évolution des signaux en fonction du temps et des cycles d'horloge, et constituent donc une base fiable pour une estimation temporelle du fonctionnement du contrôleur.\\
+Le contrôleur SRAM est entièrement synchronisé sur l'horloge Clk. Chaque transition d'état de la machine à états finis ainsi que chaque opération de lecture ou d'écriture s'effectue sur des fronts d'horloge bien définis. La durée d'exécution d'une opération dépend donc directement du nombre de cycles d'horloge nécessaires à son déroulement.\\
+
+\subsection{Accès en mode lecture et écriture simple}
+
+D'après les chronogrammes de simulation, une opération d'écriture simple se déroule selon les étapes suivantes :\\
+
+\begin{itemize}
+    \item Un cycle pour la prise en compte de la commande et de l'adresse utilisateur.
+    \item Un cycles de décalage de la donnée afin de respecter les contraintes temporelles de la SRAM.
+    \item un cycle effectif d'écriture dans la mémoire.
+\end{itemize}
+
+On observe ainsi qu'une écriture simple nécessite environ 3 cycles d'horloge entre la demande utilisateur et la fin effective de l'opération.\\
+
+De manière similaire, une opération de lecture simple comprend :
+
+\begin{itemize}
+    \item Un cycle pour la validation de la commande et de l'adresse.
+    \item Un cycle pour l'accès mémoire.
+    \item Un cycle pour la récupération et la stabilisation de la donnée en sortie.
+\end{itemize}
+
+La durée d'une lecture simple est donc également de l'ordre de 3 cycles d'horloge, comme confirmé par les marqueurs visibles sur les chronogrammes de simulation.\\
+
+\subsection{Accès en mode Burst}
+
+En mode Burst, l'estimation est plus favorable. Les captures de simulation montrent que:\\
+
+Le premier accès du burst présente un coût similaire à une lecture ou écriture simple.\\
+Les accès suivants sont réalisés à raison d'un mot par cycle d'horloge.\\
+Ainsi, pour un burst de N mots, la durée totale peut être estimée à:\\
+Un coût initial de quelques cycles (initialisation du burst), puis N cycles supplémentaires pour les N transferts consécutifs.\\
+Les chronogrammes de simulation en mode Burst confirment ce comportement, avec une incrémentation de la donnée et une lecture/écriture valide à chaque cycle d'horloge pendant la phase de burst.\\
+
+\subsection{Limites de l'estimation}
+
+Cette estimation repose sur un modèle simulé et ne prend pas en compte les délais physiques liés au FPGA, les temps de propagation réels, ni les éventuelles contraintes liées à l'implémentation matérielle finale.\\
+
+Cependant, dans le cadre de ce projet, l'analyse temporelle basée sur les captures de simulation est suffisante pour caractériser le comportement du contrôleur SRAM et comparer les performances entre les modes simple et burst.\\
